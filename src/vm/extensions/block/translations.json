@@ -1,0 +1,14 @@
+{
+  "en": {
+    "xcxMesh.name": "Mesh",
+    "xcxMesh.doIt": "do it [SCRIPT]"
+  },
+  "ja": {
+    "xcxMesh.name": "Mesh",
+    "xcxMesh.doIt": "[SCRIPT] を実行する"
+  },
+  "ja-Hira": {
+    "xcxMesh.name": "Mesh",
+    "xcxMesh.doIt": "[SCRIPT] をじっこうする"
+  }
+}

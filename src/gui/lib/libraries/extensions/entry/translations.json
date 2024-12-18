@@ -1,0 +1,14 @@
+{
+  "en": {
+    "xcxMesh.entry.name": "Mesh",
+    "xcxMesh.entry.description": "Description of this extension"
+  },
+  "ja": {
+    "xcxMesh.entry.name": "Mesh",
+    "xcxMesh.entry.description": "拡張機能の説明"
+  },
+  "ja-Hira": {
+    "xcxMesh.entry.name": "Mesh",
+    "xcxMesh.entry.description": "かくちょうきのうのせつめい"
+  }
+}
