@@ -72,7 +72,9 @@ const rollupOptions = {
         },
         buildDelay: 500,
     },
-    external: [],
+    external: [
+        'https://cdn.jsdelivr.net/npm/peerjs@1.5.4/+esm',
+    ],
 }
 
 export default rollupOptions;
