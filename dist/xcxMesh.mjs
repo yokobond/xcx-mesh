@@ -1179,14 +1179,13 @@ var SharedDataChannel = /*#__PURE__*/function () {
    * @param {DataConnection} connection - PeerJS DataConnection instance
    */
   function SharedDataChannel(connection) {
-    var _this = this;
     _classCallCheck$1(this, SharedDataChannel);
     /** @type {string|null} ID of the remote peer */
     this.remoteID = null;
     /** @type {DataConnection|null} PeerJS DataConnection instance */
     this.connection = null;
-    /** @type {boolean} Connection status */
-    this.open = false;
+    /** @type {string} Connection state */
+    this.state = 'opening';
     /** @type {Map<string, any>} Map of shared variables */
     this.sharedVars = new Map();
     /** @type {{type: string, data: any}} Last received event */
@@ -1198,9 +1197,7 @@ var SharedDataChannel = /*#__PURE__*/function () {
     this.stateChangeListeners = [];
     /** @type {Array<Function>} Array of event listeners */
     this.sharedEventListeners = [];
-    connection.on('open', function () {
-      _this._setConnection(connection);
-    });
+    this._setConnection(connection);
   }
 
   /**
@@ -1224,23 +1221,22 @@ var SharedDataChannel = /*#__PURE__*/function () {
     }
 
     /**
-     * Set up the connection for this channel
-     * @param {any} conn - PeerJS connection object
+     * Close the data channel
      */
   }, {
-    key: "_setConnection",
-    value: function _setConnection(conn) {
-      this.connection = conn;
-      this.remoteID = decodeFromPeerID(conn.peer);
-      this._setupConnectionHandlers();
-      this.open = true;
+    key: "close",
+    value: function close() {
+      if (this.connection && this.connection.open) {
+        this.connection.close();
+      }
+      this.state = 'closed';
       if (this.stateChangeListeners) {
         var _iterator = _createForOfIteratorHelper(this.stateChangeListeners),
           _step;
         try {
           for (_iterator.s(); !(_step = _iterator.n()).done;) {
             var listener = _step.value;
-            listener('open', this);
+            listener('closed', this);
           }
         } catch (err) {
           _iterator.e(err);
@@ -1251,34 +1247,100 @@ var SharedDataChannel = /*#__PURE__*/function () {
     }
 
     /**
+     * Check if the data channel is open.
+     * @returns {boolean} True if the data channel is open
+     */
+  }, {
+    key: "isOpen",
+    value: function isOpen() {
+      return this.state === 'open';
+    }
+
+    /**
+     * Check if the data channel is closed after opened.
+     * @returns {boolean} True if the data channel is closed
+     */
+  }, {
+    key: "isClosed",
+    value: function isClosed() {
+      return this.state === 'closed';
+    }
+
+    /**
+     * Set up the connection for this channel
+     * @param {any} conn - PeerJS connection object
+     */
+  }, {
+    key: "_setConnection",
+    value: function _setConnection(conn) {
+      this.connection = conn;
+      this.remoteID = decodeFromPeerID(conn.peer);
+      this._setupConnectionHandlers();
+    }
+
+    /**
      * Set up handlers for connection events
      * @private
      */
   }, {
     key: "_setupConnectionHandlers",
     value: function _setupConnectionHandlers() {
-      var _this2 = this;
-      this.connection.on('data', function (data) {
-        if (data.type === 'var') {
-          _this2.sharedVars.set(data.key, data.value);
-        } else if (data.type === 'event') {
-          _this2.onSharedEvent(data.eventType, data.eventData);
-        }
-      });
-      this.connection.on('close', function () {
-        _this2.open = false;
-        if (_this2.stateChangeListeners) {
-          var _iterator2 = _createForOfIteratorHelper(_this2.stateChangeListeners),
+      var _this = this;
+      this.connection.on('open', function () {
+        _this.state = 'open';
+        if (_this.stateChangeListeners) {
+          var _iterator2 = _createForOfIteratorHelper(_this.stateChangeListeners),
             _step2;
           try {
             for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
               var listener = _step2.value;
-              listener('closed', _this2);
+              listener('open', _this);
             }
           } catch (err) {
             _iterator2.e(err);
           } finally {
             _iterator2.f();
+          }
+        }
+      });
+      this.connection.on('error', function (err) {
+        _this.state = 'error';
+        if (_this.stateChangeListeners) {
+          var _iterator3 = _createForOfIteratorHelper(_this.stateChangeListeners),
+            _step3;
+          try {
+            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+              var listener = _step3.value;
+              listener('error', _this, err);
+            }
+          } catch (err) {
+            _iterator3.e(err);
+          } finally {
+            _iterator3.f();
+          }
+        }
+      });
+      this.connection.on('data', function (data) {
+        if (data.type === 'var') {
+          _this.sharedVars.set(data.key, data.value);
+        } else if (data.type === 'event') {
+          _this.onSharedEvent(data.eventType, data.eventData);
+        }
+      });
+      this.connection.on('close', function () {
+        _this.state = 'closed';
+        if (_this.stateChangeListeners) {
+          var _iterator4 = _createForOfIteratorHelper(_this.stateChangeListeners),
+            _step4;
+          try {
+            for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+              var listener = _step4.value;
+              listener('closed', _this);
+            }
+          } catch (err) {
+            _iterator4.e(err);
+          } finally {
+            _iterator4.f();
           }
         }
       });
@@ -1304,7 +1366,7 @@ var SharedDataChannel = /*#__PURE__*/function () {
   }, {
     key: "setSharedVar",
     value: function setSharedVar(key, value) {
-      if (!this.open) return Promise.resolve('not connected');
+      if (!this.state === 'open') return Promise.resolve('not connected');
       this.sharedVars.set(key, value);
       return this.connection.send({
         type: 'var',
@@ -1325,17 +1387,17 @@ var SharedDataChannel = /*#__PURE__*/function () {
         type: type,
         data: data
       };
-      var _iterator3 = _createForOfIteratorHelper(this.sharedEventListeners),
-        _step3;
+      var _iterator5 = _createForOfIteratorHelper(this.sharedEventListeners),
+        _step5;
       try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var listener = _step3.value;
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          var listener = _step5.value;
           listener(type, data);
         }
       } catch (err) {
-        _iterator3.e(err);
+        _iterator5.e(err);
       } finally {
-        _iterator3.f();
+        _iterator5.f();
       }
     }
 
@@ -1352,7 +1414,7 @@ var SharedDataChannel = /*#__PURE__*/function () {
         return _regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              if (this.open) {
+              if (!(!this.state === 'open')) {
                 _context2.next = 2;
                 break;
               }
@@ -1397,32 +1459,6 @@ var SharedDataChannel = /*#__PURE__*/function () {
     value: function lastSharedEventData() {
       return this._lastEvent.data;
     }
-
-    /**
-     * Close the data channel
-     */
-  }, {
-    key: "close",
-    value: function close() {
-      if (this.connection && this.connection.open) {
-        this.connection.close();
-      }
-      this.open = false;
-      if (this.stateChangeListeners) {
-        var _iterator4 = _createForOfIteratorHelper(this.stateChangeListeners),
-          _step4;
-        try {
-          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-            var listener = _step4.value;
-            listener('closed', this);
-          }
-        } catch (err) {
-          _iterator4.e(err);
-        } finally {
-          _iterator4.f();
-        }
-      }
-    }
   }]);
 }();
 /**
@@ -1440,51 +1476,52 @@ var Mesh = /*#__PURE__*/function () {
     this.id = null;
     /** @type {Map<string, SharedDataChannel>} Map of data channels */
     this.channels = new Map();
+    /** @type {Array<Function>} Event listener callback */
+    this.eventListeners = [];
   }
-
-  /**
-   * Set event listener for mesh events
-   * @param {Function} listener - Event listener callback
-   */
   return _createClass$1(Mesh, [{
-    key: "setEventListener",
-    value: function setEventListener(listener) {
-      this.eventListener = listener;
+    key: "addMeshEventListener",
+    value: function addMeshEventListener(listener) {
+      this.eventListeners.push(listener);
     }
 
     /**
      * Get or create a data channel for a remote peer
      * @param {DataConnection} connection - PeerJS DataConnection instance
-     * @returns {SharedDataChannel} Data channel instance
+     * @returns {Promise<SharedDataChannel>} Promise that resolves with the data channel
      * @private
      */
   }, {
     key: "_getOrCreateChannel",
     value: function _getOrCreateChannel(connection) {
-      var _this3 = this;
+      var _this2 = this;
       var remoteID = decodeFromPeerID(connection.peer);
       var channel = this.channels.get(remoteID);
-      if (!channel) {
+      if (channel) {
+        if (channel.isOpen()) {
+          return Promise.resolve(channel);
+        }
+        channel.close();
+        this.channels.delete(remoteID);
+      }
+      return new Promise(function (resolve) {
         channel = new SharedDataChannel(connection);
         channel.addStateChangeListener(function (state) {
           if (state === 'open') {
-            if (_this3.eventListener) {
-              _this3.eventListener({
+            _this2.channels.set(remoteID, channel);
+            _this2.eventListeners.forEach(function (listener) {
+              listener({
                 type: 'dataChannelConnected',
                 data: channel.remoteID
               });
-            }
-          }
-          if (state === 'closed') {
-            _this3.channels.delete(remoteID);
+            });
+            resolve(channel);
           }
         });
         channel.addSharedEventListener(function () {
-          _this3.lastSharedEventChannelID = remoteID;
+          _this2.lastSharedEventChannelID = remoteID;
         });
-        this.channels.set(remoteID, channel);
-      }
-      return channel;
+      });
     }
 
     /**
@@ -1496,7 +1533,7 @@ var Mesh = /*#__PURE__*/function () {
   }, {
     key: "openPeer",
     value: function openPeer(localID) {
-      var _this4 = this;
+      var _this3 = this;
       if (localID === '') {
         localID = "mesh-".concat(Math.random().toString(36).substring(2, 6));
       }
@@ -1507,16 +1544,30 @@ var Mesh = /*#__PURE__*/function () {
         this.closePeer();
       }
       return new Promise(function (resolve, reject) {
-        _this4.peer = new Peer(encodeToPeerID(localID));
-        _this4.peer.on('open', function (peerID) {
-          _this4.id = decodeFromPeerID(peerID);
-          _this4.peer.on('connection', function (conn) {
-            _this4._getOrCreateChannel(conn);
-          });
-          resolve(_this4.peer);
+        _this3.peer = new Peer(encodeToPeerID(localID));
+        _this3.peer.on('open', function (peerID) {
+          _this3.id = decodeFromPeerID(peerID);
+          _this3.peer.on('connection', /*#__PURE__*/function () {
+            var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee3(conn) {
+              return _regeneratorRuntime.wrap(function _callee3$(_context3) {
+                while (1) switch (_context3.prev = _context3.next) {
+                  case 0:
+                    _context3.next = 2;
+                    return _this3._getOrCreateChannel(conn);
+                  case 2:
+                  case "end":
+                    return _context3.stop();
+                }
+              }, _callee3);
+            }));
+            return function (_x3) {
+              return _ref2.apply(this, arguments);
+            };
+          }());
+          resolve(_this3.peer);
         });
-        _this4.peer.on('error', function (err) {
-          _this4.closePeer();
+        _this3.peer.on('error', function (err) {
+          _this3.closePeer();
           reject(err);
         });
       });
@@ -1529,17 +1580,17 @@ var Mesh = /*#__PURE__*/function () {
     key: "closePeer",
     value: function closePeer() {
       // Close all data channels first
-      var _iterator5 = _createForOfIteratorHelper(this.channels.values()),
-        _step5;
+      var _iterator6 = _createForOfIteratorHelper(this.channels.values()),
+        _step6;
       try {
-        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-          var channel = _step5.value;
+        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+          var channel = _step6.value;
           channel.close();
         }
       } catch (err) {
-        _iterator5.e(err);
+        _iterator6.e(err);
       } finally {
-        _iterator5.f();
+        _iterator6.f();
       }
       this.channels.clear();
 
@@ -1570,20 +1621,14 @@ var Mesh = /*#__PURE__*/function () {
     key: "connectDataChannel",
     value: function connectDataChannel(remoteID) {
       if (!this.peer) throw new Error('Peer not initialized');
-      if (this.channels.has(remoteID)) {
-        return Promise.resolve(this.channels.get(remoteID));
+      var channel = this.channels.get(remoteID);
+      if (channel && channel.isOpen()) {
+        return Promise.resolve(channel);
       }
       var conn = this.peer.connect(encodeToPeerID(remoteID));
-      var channel = this._getOrCreateChannel(conn);
-      return new Promise(function (resolve, reject) {
-        conn.on('open', function () {
-          resolve(channel);
-        });
-        conn.on('error', function (err) {
-          return reject(err);
-        });
-      });
+      return this._getOrCreateChannel(conn);
     }
+
     /**
      * Get an existing data channel
      * @param {string} remoteID - Remote Mesh ID
@@ -1604,8 +1649,7 @@ var Mesh = /*#__PURE__*/function () {
     value: function disconnectDataChannel(remoteID) {
       var channel = this.channels.get(remoteID);
       if (channel) {
-        this.channels.delete(remoteID);
-        if (channel.open) {
+        if (!channel.isClosed()) {
           channel.close();
         }
       }
@@ -1687,7 +1731,7 @@ var MeshBlocks = /*#__PURE__*/function () {
      * @type {Mesh}
      */
     this.mesh = new Mesh();
-    this.mesh.setEventListener(this.onMeshEvent.bind(this));
+    this.mesh.addMeshEventListener(this.onMeshEvent.bind(this));
   }
 
   /**
@@ -1786,17 +1830,17 @@ var MeshBlocks = /*#__PURE__*/function () {
     key: "connectDataChannel",
     value: (function () {
       var _connectDataChannel = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee2(args) {
-        var remoteID, currentChannel;
+        var remoteID, channel;
         return _regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               remoteID = String(args.ID).trim();
-              currentChannel = this.mesh.getDataChannel(remoteID);
-              if (!(currentChannel && currentChannel.open)) {
+              channel = this.mesh.getDataChannel(remoteID);
+              if (!(channel && channel.isOpen())) {
                 _context2.next = 7;
                 break;
               }
-              if (!(currentChannel.remoteID === remoteID)) {
+              if (!(channel.remoteID === remoteID)) {
                 _context2.next = 5;
                 break;
               }
@@ -1838,7 +1882,7 @@ var MeshBlocks = /*#__PURE__*/function () {
       var remoteID = String(args.ID).trim();
       var channel = this.mesh.getDataChannel(remoteID);
       if (!channel) return false;
-      return channel.open;
+      return channel.isOpen();
     }
 
     /**
@@ -1856,13 +1900,17 @@ var MeshBlocks = /*#__PURE__*/function () {
     /**
      * When the data channel is closed.
      * @param {object} args - the block's arguments.
+     * @param {string} args.ID - the remote ID.
      * @param {object} util - utility object provided by the runtime.
      * @returns {boolean} - true if the data channel is closed.
      */
   }, {
     key: "whenDataChannelDisconnected",
-    value: function whenDataChannelDisconnected(args, util) {
-      return !this.isDataChannelConnected(args, util);
+    value: function whenDataChannelDisconnected(args) {
+      var remoteID = String(args.ID).trim();
+      var channel = this.mesh.getDataChannel(remoteID);
+      if (!channel) return false;
+      return !channel.isOpen();
     }
 
     /**
