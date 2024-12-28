@@ -345,8 +345,9 @@ class Mesh {
      */
     connectDataChannel (remoteID) {
         if (!this.peer) throw new Error('Peer not initialized');
-        if (this.channels.has(remoteID)) {
-            return Promise.resolve(this.channels.get(remoteID));
+        const channel = this.channels.get(remoteID);
+        if (channel && channel.isOpen()) {
+            return Promise.resolve(channel);
         }
         const conn = this.peer.connect(encodeToPeerID(remoteID));
         return this._getOrCreateChannel(conn);
