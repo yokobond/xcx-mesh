@@ -104,7 +104,7 @@ class MeshBlocks {
          * @type {Mesh}
          */
         this.mesh = new Mesh();
-        this.mesh.setEventListener(this.onMeshEvent.bind(this));
+        this.mesh.addMeshEventListener(this.onMeshEvent.bind(this));
     }
 
     /**
@@ -173,9 +173,9 @@ class MeshBlocks {
      */
     async connectDataChannel (args) {
         const remoteID = String(args.ID).trim();
-        const currentChannel = this.mesh.getDataChannel(remoteID);
-        if (currentChannel && currentChannel.open) {
-            if (currentChannel.remoteID === remoteID) {
+        const channel = this.mesh.getDataChannel(remoteID);
+        if (channel && channel.isOpen()) {
+            if (channel.remoteID === remoteID) {
                 return `Already connected to peer "${remoteID}"`;
             }
             await this.mesh.disconnectDataChannel(remoteID);
@@ -198,7 +198,7 @@ class MeshBlocks {
         const remoteID = String(args.ID).trim();
         const channel = this.mesh.getDataChannel(remoteID);
         if (!channel) return false;
-        return channel.open;
+        return channel.isOpen();
     }
 
     /**
@@ -214,11 +214,15 @@ class MeshBlocks {
     /**
      * When the data channel is closed.
      * @param {object} args - the block's arguments.
+     * @param {string} args.ID - the remote ID.
      * @param {object} util - utility object provided by the runtime.
      * @returns {boolean} - true if the data channel is closed.
      */
-    whenDataChannelDisconnected (args, util) {
-        return !this.isDataChannelConnected(args, util);
+    whenDataChannelDisconnected (args) {
+        const remoteID = String(args.ID).trim();
+        const channel = this.mesh.getDataChannel(remoteID);
+        if (!channel) return false;
+        return !channel.isOpen();
     }
 
     /**
