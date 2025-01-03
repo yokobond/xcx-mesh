@@ -165,8 +165,6 @@ class MeshBlocks {
 
     /**
      * Return the ID of the local peer.
-     * @param {object} _args - the block's arguments.
-     * @param {object} util - utility object provided by the runtime.
      * @returns {string} - the ID of the local peer.
      */
     myID () {
@@ -249,6 +247,12 @@ class MeshBlocks {
         await this.mesh.disconnectDataChannel(remoteID);
     }
 
+    /**
+     * Return the data channel ID at the index.
+     * @param {object} args - arguments for the block.
+     * @param {number} args.CHANNEL_INDEX - the index of the data channel.
+     * @return {string} - the data channel ID.
+     */
     dataChannelIDAt (args) {
         const index = Cast.toNumber(args.CHANNEL_INDEX) - 1;
         const remoteID = this.mesh.dataChannelIDAt(index);
