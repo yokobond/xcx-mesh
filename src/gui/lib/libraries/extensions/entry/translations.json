@@ -1,14 +1,14 @@
 {
   "en": {
     "xcxMesh.entry.name": "Mesh",
-    "xcxMesh.entry.description": "Description of this extension"
+    "xcxMesh.entry.description": "A block for peer-to-peer communication. It establishes a data channel using WebRTC and sends and receives data."
   },
   "ja": {
     "xcxMesh.entry.name": "Mesh",
-    "xcxMesh.entry.description": "拡張機能の説明"
+    "xcxMesh.entry.description": "ピアツーピアの通信を行う。WebRTCを利用して、データチャンネルを確立し、データの送受信をする。"
   },
   "ja-Hira": {
-    "xcxMesh.entry.name": "Mesh",
-    "xcxMesh.entry.description": "かくちょうきのうのせつめい"
+    "xcxMesh.entry.name": "メッシュ",
+    "xcxMesh.entry.description": "1 たい 1 の つうしん を おこなう。"
   }
 }

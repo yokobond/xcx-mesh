@@ -29,15 +29,14 @@ const entry = {
     insetIconURL: insetIconURL,
     get description () {
         return formatMessage({
-            defaultMessage: 'an extension for Xcratch',
-            description: 'Description for this extension',
+            defaultMessage: 'Mesh extension for Xcratch',
             id: 'xcxMesh.entry.description'
         });
     },
     featured: true,
     disabled: false,
     bluetoothRequired: false,
-    internetConnectionRequired: false,
+    internetConnectionRequired: true,
     helpLink: 'https://yokobond.github.io/xcx-mesh/',
     setFormatMessage: formatter => {
         formatMessage = formatter;
