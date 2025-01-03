@@ -180,14 +180,18 @@ class MeshBlocks {
      * @param {string} args.ID - the remote ID.
      * @returns {string} - the result of connecting to the peer.
      */
-    async connectDataChannel (args) {
+    async connectDataChannel (args, util) {
         const remoteID = String(args.ID).trim();
         const channel = this.mesh.getDataChannel(remoteID);
-        if (channel && channel.isOpen()) {
-            if (channel.remoteID === remoteID) {
+        if (channel) {
+            if (channel.isOpen()) {
                 return `Already connected to peer "${remoteID}"`;
             }
-            await this.mesh.disconnectDataChannel(remoteID);
+            if (channel.isOpening()) {
+                util.yield();
+                return;
+            }
+            channel.close();
         }
         try {
             await this.mesh.connectDataChannel(remoteID);
