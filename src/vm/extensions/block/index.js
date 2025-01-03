@@ -131,13 +131,20 @@ class MeshBlocks {
      * @throws {Error} - Thrown if the peer is already signaling with the same signal name.
      * @throws {Error} - Thrown if the peer is already disconnected.
      */
-    async openPeer (args) {
+    async openPeer (args, util) {
+        if (this.isPeerOpening) {
+            util.yield();
+            return;
+        }
+        this.isPeerOpening = true;
         const localID = String(args.ID).trim();
         try {
             await this.mesh.openPeer(localID);
             return `Open as "${this.mesh.id}"`;
         } catch (e) {
             return `Failed to open as "${localID}": ${e}`;
+        } finally {
+            this.isPeerOpening = false;
         }
     }
 
