@@ -292,7 +292,9 @@ class MeshBlocks {
         if (!channel) return 'data channel is not connected';
         const key = String(args.KEY).trim();
         const value = Cast.toString(args.VALUE);
-        return channel.setSharedVar(key, value);
+        channel.setSharedVar(key, value)
+            .catch(e => `Failed to set "${key}" to "${value}" in ${remoteID}: ${e}`);
+        // Do not wait for the promise to resolve for performance reasons.
     }
 
     /**

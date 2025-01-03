@@ -201,16 +201,17 @@ class SharedDataChannel {
      * Set a shared variable
      * @param {string} key - Variable name
      * @param {any} value - Variable value
-     * @returns {Promise<string|void>} Promise resolving with error message or void
+     * @returns {Promise<void>} Promise that resolves when the variable is set
      */
-    setSharedVar (key, value) {
-        if (!this.state === 'open') return Promise.resolve('not connected');
+    async setSharedVar (key, value) {
+        await this.connection
+            .send(
+                {
+                    type: 'var',
+                    key: key,
+                    value: value
+                });
         this.sharedVars.set(key, value);
-        return this.connection.send({
-            type: 'var',
-            key: key,
-            value: value
-        });
     }
 
     /**
@@ -232,15 +233,15 @@ class SharedDataChannel {
      * Dispatch a shared event
      * @param {string} type - Event type
      * @param {any} data - Event data
-     * @returns {Promise<string|void>} Promise resolving with error message or void
+     * @returns {Promise<void>} Promise that resolves when the event is dispatched
      */
     async dispatchSharedEvent (type, data) {
-        if (!this.state === 'open') return Promise.resolve('not connected');
-        await this.connection.send({
-            type: 'event',
-            eventType: type,
-            eventData: data
-        });
+        await this.connection
+            .send({
+                type: 'event',
+                eventType: type,
+                eventData: data
+            });
         this.onSharedEvent(type, data);
     }
 
