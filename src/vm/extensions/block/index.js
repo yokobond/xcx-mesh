@@ -115,6 +115,8 @@ class MeshBlocks {
         if (event.type === 'dataChannelConnected') {
             const channel = this.mesh.getDataChannel(event.data);
             channel.addSharedEventListener(this.onSharedEvent.bind(this));
+        } else if (event.type === 'dataChannelRequested') {
+            this.runtime.startHats('xcxMesh_whenDataChannelRequested');
         }
     }
 
@@ -482,6 +484,15 @@ class MeshBlocks {
                             })
                         }
                     }
+                },
+                {
+                    opcode: 'whenDataChannelRequested',
+                    blockType: BlockType.EVENT,
+                    isEdgeActivated: false,
+                    text: formatMessage({
+                        id: 'xcxMesh.whenDataChannelRequested',
+                        default: 'when data channel requested'
+                    })
                 },
                 {
                     opcode: 'dataChannelIDAt',
