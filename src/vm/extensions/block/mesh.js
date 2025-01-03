@@ -13,7 +13,8 @@ let Peer;
  * @returns {string} PeerJS ID
  */
 const encodeToPeerID = function (meshID) {
-    return btoa(encodeURIComponent(meshID));
+    return `0${btoa(encodeURIComponent(meshID))}0`
+        .replace(/[=]/g, '0equal0');
 };
 
 /**
@@ -22,7 +23,8 @@ const encodeToPeerID = function (meshID) {
  * @returns {string} Mesh ID
  */
 const decodeFromPeerID = function (peerID) {
-    return decodeURIComponent(atob(peerID));
+    return decodeURIComponent(atob(peerID.slice(1, -1)
+        .replace(/0equal0/g, '=')));
 };
 
 /**
