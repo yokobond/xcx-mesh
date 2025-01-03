@@ -194,7 +194,7 @@ class SharedDataChannel {
      * @returns {any} Variable value or empty string if not found
      */
     sharedVar (key) {
-        return this.sharedVars.get(key) || '';
+        return this.sharedVars.get(key);
     }
 
     /**

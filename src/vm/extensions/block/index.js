@@ -275,7 +275,7 @@ class MeshBlocks {
         const channel = this.mesh.getDataChannel(remoteID);
         if (!channel) return '';
         const key = String(args.KEY).trim();
-        return channel.sharedVar(key);
+        return channel.sharedVar(key) || '';
     }
 
     /**
@@ -316,7 +316,7 @@ class MeshBlocks {
         const remoteID = String(args.ID).trim();
         const channel = this.mesh.getDataChannel(remoteID);
         if (!channel) return '';
-        return channel.lastSharedEventType();
+        return channel.lastSharedEventType() || '';
     }
 
     /**
@@ -329,7 +329,7 @@ class MeshBlocks {
         const remoteID = String(args.ID).trim();
         const channel = this.mesh.getDataChannel(remoteID);
         if (!channel) return '';
-        return channel.lastSharedEventData();
+        return channel.lastSharedEventData() || '';
     }
 
     /**
@@ -346,7 +346,8 @@ class MeshBlocks {
         if (!channel) return Promise.resolve(`data channel for ${remoteID} is not connected`);
         const type = String(args.TYPE).trim();
         const data = Cast.toString(args.DATA);
-        return channel.dispatchSharedEvent(type, data);
+        return channel.dispatchSharedEvent(type, data)
+            .catch(e => `Failed to dispatch event "${type}" to ${remoteID}: ${e}`);
     }
 
     /**
