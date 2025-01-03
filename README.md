@@ -1,75 +1,36 @@
-# Mesh
-An example extension for [Xcratch](https://xcratch.github.io/)
+# Mesh Extension for Xcratch
 
-This extension add extra-block "do it", that executes string in its input field as a sentence in Javascript and return the result.
+A peer-to-peer communication extension for [Xcratch](https://xcratch.github.io/). This extension establishes data channels using WebRTC to enable direct communication between Scratch projects. (This extension has no TURN server, so it works only in the local network.)
 
+## ⚡ Getting Started
 
-## ✨ What You Can Do With This Extension
+### Using in Xcratch
 
-Play [Example Project](https://xcratch.github.io/editor/#https://yokobond.github.io/xcx-mesh/projects/example.sb3) to look at what you can do with "Mesh" extension. 
-<iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-mesh/projects/example.sb3" width="540px" height="460px"></iframe>
-
-
-## How to Use in Xcratch
-
-This extension can be used with other extension in [Xcratch](https://xcratch.github.io/). 
-1. Open [Xcratch Editor](https://xcratch.github.io/editor)
+1. Open [Xcratch Editor](https://xcratch.github.io/)
 2. Click 'Add Extension' button
 3. Select 'Extension Loader' extension
-4. Type the module URL in the input field 
+4. Type the following URL in the input field:
 ```
 https://yokobond.github.io/xcx-mesh/dist/xcxMesh.mjs
 ```
 5. Click 'OK' button
 6. Now you can use the blocks of this extension
 
+## ✨ What You Can Do With This Extension
 
-## Development
+Play [Example Project](https://xcratch.github.io/editor/#https://yokobond.github.io/xcx-mesh/projects/example.sb3) to look at what you can do with "Mesh" extension.
 
-### Install Dependencies
-
-```sh
-npm install
-```
-
-### Setup Development Environment
-
-Change ```vmSrcOrg``` to your local ```scratch-vm``` directory in ```./scripts/setup-dev.js``` then run setup-dev script to setup development environment.
-
-```sh
-npm run setup-dev
-```
-
-### Bundle into a Module
-
-Run build script to bundle this extension into a module file which could be loaded on Xcratch.
-
-```sh
-npm run build
-```
-
-### Watch and Bundle
-
-Run watch script to watch the changes of source files and bundle automatically.
-
-```sh
-npm run watch
-```
-
-### Test
-
-Run test script to test this extension.
-
-```sh
-npm run test
-```
-
+This project demonstrates how to use the "Mesh" extension to establish a peer-to-peer connection between two or more Scratch projects. Start the project in multiple tabs or browsers to see how the projects can communicate with each other. Press the green flag to start the project and click the "Mesh" sprite to open peer with a unique ID. After each peer of the projects are opened, you can connect to other peers by clicking the "Mesh" sprite and typing the ID in the input field. Once the connection is established, you can share key=values and events with the connected peers. Then you can move your cat sprite with arrow keys and see movement of the cat sprite in other connected projects.
+<iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-mesh/projects/example.sb3" width="540px" height="460px"></iframe>
 
 ## 🏠 Home Page
 
 Open this page from [https://yokobond.github.io/xcx-mesh/](https://yokobond.github.io/xcx-mesh/)
 
-
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/yokobond/xcx-mesh/issues). 
+
+## 📝 License
+
+This software is licensed under the [GNU Affero General Public License Version 3](LICENSE).
