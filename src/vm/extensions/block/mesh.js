@@ -28,241 +28,6 @@ const decodeFromPeerID = function (peerID) {
 };
 
 /**
- * Class representing a data channel for peer-to-peer communication
- */
-class SharedDataChannel {
-    /**
-     * Create a DataChannel instance
-     * @param {Peer} peer - PeerJS instance
-     * @param {string|null} remoteID - ID of the remote peer
-     */
-    constructor (peer, remoteID) {
-        if (!peer) throw new Error('Peer not set');
-
-        /** @type {Peer} PeerJS instance */
-        this.peer = peer;
-        /** @type {string|null} ID of the remote peer */
-        this.remoteID = remoteID;
-        /** @type {DataConnection|null} PeerJS DataConnection instance */
-        this.connection = null;
-        /** @type {string} Connection state */
-        this.state = 'created';
-        /** @type {Map<string, any>} Map of shared variables */
-        this.sharedVars = new Map();
-        /** @type {{type: string, data: any}} Last received event */
-        this._lastEvent = {type: '', data: ''};
-        /** @type {Array<Function>} Array of state change listeners */
-        this.stateChangeListeners = [];
-        /** @type {Array<Function>} Array of event listeners */
-        this.sharedEventListeners = [];
-    }
-
-    /**
-     * Change the state of the data channel
-     * @param {string} state - New state
-     * @private
-     */
-    _changeState (state) {
-        this.state = state;
-        for (const listener of this.stateChangeListeners) {
-            listener(state, this);
-        }
-    }
-
-    /**
-     * Add a listener for state changes
-     * @param {Function} listener - Callback function for state changes
-     */
-    addStateChangeListener (listener) {
-        this.stateChangeListeners.push(listener);
-    }
-
-    /**
-     * Remove a state change listener
-     * @param {Function} listener - Callback function to remove
-     */
-    removeStateChangeListener (listener) {
-        const index = this.stateChangeListeners.indexOf(listener);
-        if (index > -1) {
-            this.stateChangeListeners.splice(index, 1);
-        }
-    }
-
-    /**
-     * Add a listener for shared events
-     * @param {Function} listener - Callback function for shared events
-     */
-    addSharedEventListener (listener) {
-        this.sharedEventListeners.push(listener);
-    }
-
-    /**
-     * Open the data connection and set up event listeners
-     * @returns {Promise<void>} Promise that resolves when the connection is open
-     * @throws {Error} When failing to open the connection
-     * @private
-     */
-    _openConnection () {
-        return new Promise((resolve, reject) => {
-            this.connection.on('open', () => {
-                this._changeState('open');
-                resolve();
-            });
-            this.connection.on('error', err => {
-                this._changeState('error');
-                reject(new Error(err));
-            });
-            this.connection.on('data', data => {
-                if (data.type === 'var') {
-                    this.sharedVars.set(data.key, data.value);
-                } else if (data.type === 'event') {
-                    this.onSharedEvent(data.eventType, data.eventData);
-                }
-            });
-            this.connection.on('close', () => {
-                this._changeState('closed');
-            });
-        });
-    }
-
-    /**
-     * Open the data channel with an existing connection
-     * @param {DataConnection} connection - PeerJS DataConnection instance
-     * @returns {Promise<void>} Promise that resolves when the connection is open
-     * @throws {Error} When failing to open the connection
-     */
-    openWithConnection (connection) {
-        this.connection = connection;
-        this.remoteID = decodeFromPeerID(this.connection.peer);
-        return this._openConnection();
-    }
-
-    /**
-     * Connect to the remote peer
-     * @returns {Promise<void>} Promise that resolves when the connection is open
-     * @throws {Error} When failing to open the connection
-     */
-    open () {
-        if (this.isOpen()) {
-            return Promise.resolve();
-        }
-        if (!this.remoteID) {
-            throw new Error('Remote ID not set');
-        }
-        this._changeState('opening');
-        const connection = this.peer.connect(encodeToPeerID(this.remoteID));
-        this.connection = connection;
-        return this._openConnection();
-    }
-
-    /**
-     * Close the data channel
-     */
-    close () {
-        if (this.connection && this.connection.open) {
-            this.connection.close();
-        }
-    }
-
-    /**
-     * Check if the data channel is opening.
-     * @returns {boolean} True if the data channel is opening
-     */
-    isOpening () {
-        return this.state === 'opening';
-    }
-
-    /**
-     * Check if the data channel is open.
-     * @returns {boolean} True if the data channel is open
-     */
-    isOpen () {
-        return this.state === 'open';
-    }
-
-    /**
-     * Check if the data channel is closed after opened.
-     * @returns {boolean} True if the data channel is closed
-     */
-    isClosed () {
-        return this.state === 'closed';
-    }
-
-    /**
-     * Get the value of a shared variable
-     * @param {string} key - Variable name
-     * @returns {any} Variable value or empty string if not found
-     */
-    sharedVar (key) {
-        return this.sharedVars.get(key);
-    }
-
-    /**
-     * Set a shared variable
-     * @param {string} key - Variable name
-     * @param {any} value - Variable value
-     * @returns {Promise<void>} Promise that resolves when the variable is set
-     */
-    async setSharedVar (key, value) {
-        await this.connection
-            .send(
-                {
-                    type: 'var',
-                    key: key,
-                    value: value
-                });
-        this.sharedVars.set(key, value);
-    }
-
-    /**
-     * Handle incoming shared events
-     * @param {string} type - Event type
-     * @param {any} data - Event data
-     */
-    onSharedEvent (type, data) {
-        this._lastEvent = {
-            type: type,
-            data: data
-        };
-        for (const listener of this.sharedEventListeners) {
-            listener(type, data);
-        }
-    }
-
-    /**
-     * Dispatch a shared event
-     * @param {string} type - Event type
-     * @param {any} data - Event data
-     * @returns {Promise<void>} Promise that resolves when the event is dispatched
-     */
-    async dispatchSharedEvent (type, data) {
-        await this.connection
-            .send({
-                type: 'event',
-                eventType: type,
-                eventData: data
-            });
-        this.onSharedEvent(type, data);
-    }
-
-    /**
-     * Get the type of the last shared event
-     * @returns {string} Event type
-     */
-    lastSharedEventType () {
-        return this._lastEvent.type;
-    }
-
-    /**
-     * Get the data of the last shared event
-     * @returns {any} Event data
-     */
-    lastSharedEventData () {
-        return this._lastEvent.data;
-    }
-}
-
-/**
  * Class representing a mesh network of peer connections
  */
 class Mesh {
@@ -272,36 +37,64 @@ class Mesh {
     constructor () {
         /** @type {Peer|null} PeerJS instance */
         this.peer = null;
+        /** @type {string} ICE servers configuration */
+        this.iceServers = null;
         /** @type {string|null} Local peer ID */
         this.id = null;
-        /** @type {Map<string, SharedDataChannel>} Map of data channels */
-        this.channels = new Map();
+        /** @type {Map<string, DataConnection>} Map of peer connections */
+        this.connections = new Map();
         /** @type {Array<Function>} Event listener callback */
         this.eventListeners = [];
+        /** @type {Map<string, any>} Map of shared variables */
+        this.sharedVars = new Map();
+        /** @type {{sender: string, time: number, type: string, data: any}} Last shared event */
+        this.lastSharedEvent = {sender: '', time: 0, type: '', data: ''};
+        /** @type {Array<Function>} Shared event listener callback */
+        this.sharedEventListeners = [];
     }
 
+    /**
+     * Add a listener for Mesh events
+     * @param {Function} listener - Callback function for events
+     * @returns {void}
+     */
     addMeshEventListener (listener) {
         this.eventListeners.push(listener);
     }
 
     /**
-     * Get or create a data channel for a remote peer
-     * @param {string} remoteID - Remote peer ID of the data channel
-     * @returns {SharedDataChannel} Data channel instance
-     * @private
+     * Remove a listener for Mesh events
+     * @param {Function} listener - Callback function for events
+     * @returns {void}
      */
-    _getOrCreateChannel (remoteID) {
-        let channel = this.channels.get(remoteID);
-        if (channel) {
-            return channel;
+    removeMeshEventListener (listener) {
+        const index = this.eventListeners.indexOf(listener);
+        if (index > -1) {
+            this.eventListeners.splice(index, 1);
         }
-        channel = new SharedDataChannel(this.peer, remoteID);
-        this.channels.set(remoteID, channel);
-        channel.addSharedEventListener(() => {
-            this.lastSharedEventChannelID = remoteID;
-        });
-        return channel;
     }
+
+    /**
+     * Add a listener for shared events
+     * @param {Function} listener - Callback function for events
+     * @returns {void}
+     */
+    addSharedEventListener (listener) {
+        this.sharedEventListeners.push(listener);
+    }
+
+    /**
+     * Remove a listener for shared events
+     * @param {Function} listener - Callback function for events
+     * @returns {void}
+     */
+    removeSharedEventListener (listener) {
+        const index = this.sharedEventListeners.indexOf(listener);
+        if (index > -1) {
+            this.sharedEventListeners.splice(index, 1);
+        }
+    }
+
 
     /**
      * Open a peer connection.
@@ -321,18 +114,31 @@ class Mesh {
             this.closePeer();
         }
         return new Promise((resolve, reject) => {
-            this.peer = new Peer(encodeToPeerID(localID));
+            this.peer = new Peer(encodeToPeerID(localID), {
+                config: {
+                    iceServers: this.iceServers ? this.iceServers : []
+                }
+            });
             this.peer.on('open', peerID => {
                 this.id = decodeFromPeerID(peerID);
-                this.peer.on('connection', dataConnection => {
-                    const channel = this._getOrCreateChannel(decodeFromPeerID(dataConnection.peer));
-                    channel.openWithConnection(dataConnection)
+                this.peer.on('connection', requested => {
+                    const remoteID = decodeFromPeerID(requested.peer);
+                    new Promise((resolveRequest, rejectRequest) => {
+                        requested.on('open', () => {
+                            this._setupDataConnection(requested, remoteID);
+                            this._registerDataConnection(requested, remoteID);
+                            resolveRequest();
+                        });
+                        requested.on('error', err => {
+                            rejectRequest(new Error(err));
+                        });
+                    })
                         .then(() => {
                             this.eventListeners.forEach(listener => {
                                 listener(
                                     {
-                                        type: 'dataChannelRequested',
-                                        data: channel.remoteID
+                                        type: 'dataConnectionRequested',
+                                        data: remoteID
                                     });
                             });
                         });
@@ -351,10 +157,10 @@ class Mesh {
      */
     closePeer () {
         // Close all data channels first
-        for (const channel of this.channels.values()) {
-            channel.close();
+        for (const connection of this.connections.values()) {
+            connection.close();
         }
-        this.channels.clear();
+        this.connections.clear();
 
         // Destroy the peer connection
         if (this.peer) {
@@ -373,73 +179,222 @@ class Mesh {
     }
 
     /**
+     * Setup a data connection
+     * @param {DataConnection} connection - PeerJS DataConnection instance
+     * @param {string} remoteID - Remote Mesh ID
+     */
+    _setupDataConnection (connection, remoteID) {
+        connection.on('data', data => {
+            if (data.type === 'var') {
+                if (this.sharedVars.get(data.key) !== data.value) {
+                    this.connections.forEach(conn => {
+                        if (conn !== connection) {
+                            conn.send(data);
+                        }
+                    });
+                    this.sharedVars.set(data.key, data.value);
+                }
+            } else if (data.type === 'event') {
+                if (data.sender === this.id) return;
+                if (data.sender !== this.lastSharedEvent.sender ||
+                    data.time !== this.lastSharedEvent.time) {
+                    this.connections.forEach(conn => {
+                        if (conn !== connection) {
+                            conn.send(data);
+                        }
+                    });
+                    this.onSharedEvent(data);
+                }
+            }
+        });
+        connection.on('close', () => {
+            this.eventListeners.forEach(listener => {
+                listener(
+                    {
+                        type: 'dataConnectionClosed',
+                        data: remoteID
+                    });
+            });
+        });
+        connection.on('error', err => {
+            this.eventListeners.forEach(listener => {
+                listener(
+                    {
+                        type: 'dataConnectionError',
+                        data: remoteID,
+                        error: err
+                    });
+            });
+        });
+    }
+
+    /**
+     * Register a data connection
+     * @param {DataConnection} connection - PeerJS DataConnection instance
+     * @param {string} remoteID - Remote Mesh ID
+     * @private
+     */
+    _registerDataConnection (connection, remoteID) {
+        this.connections.set(remoteID, connection);
+    }
+
+    /**
      * Connect to a remote peer
      * @param {string} remoteID - Remote Mesh ID
      * @returns {Promise<SharedDataChannel>} Promise that resolves with the data channel
      */
-    connectDataChannel (remoteID) {
+    openDataConnection (remoteID) {
         if (!this.peer) throw new Error('Peer not initialized');
         if (!remoteID || remoteID === '') {
             return Promise.reject(new Error('Remote ID not set'));
         }
-        const channel = this._getOrCreateChannel(remoteID);
-        if (channel.isOpen()) {
-            return Promise.resolve(channel);
+        const conn = this.connections.get(remoteID);
+        if (conn && conn.open) {
+            return Promise.resolve(conn);
         }
-        return channel.open()
-            .then(() => {
+        const newConnection = this.peer.connect(encodeToPeerID(remoteID));
+        return new Promise((resolve, reject) => {
+            newConnection.on('open', () => {
+                this._setupDataConnection(newConnection, remoteID);
+                this._registerDataConnection(newConnection, remoteID);
                 this.eventListeners.forEach(listener => {
                     listener(
                         {
-                            type: 'dataChannelConnected',
-                            data: channel.remoteID
+                            type: 'dataConnectionOpened',
+                            data: remoteID
                         });
                 });
-                return channel;
-            })
-            .catch(err => {
-                this.channels.delete(remoteID);
-                throw err;
+                resolve(newConnection);
             });
+            newConnection.on('error', err => {
+                reject(err);
+            });
+        });
     }
 
     /**
-     * Get an existing data channel
+     * Get an existing data connection
      * @param {string} remoteID - Remote Mesh ID
-     * @returns {SharedDataChannel|undefined} Data channel if it exists
+     * @returns {DataConnection|undefined} Data connection if it exists
      */
-    getDataChannel (remoteID) {
-        return this.channels.get(remoteID);
+    getDataConnection (remoteID) {
+        return this.connections.get(remoteID);
     }
 
     /**
-     * Disconnect and remove a data channel
+     * Check if a data connection is open
+     * @param {string} remoteID - Remote Mesh ID
+     * @returns {boolean} True if the data channel is open
+     */
+    isDataConnectionOpen (remoteID) {
+        const connection = this.connections.get(remoteID);
+        return !!connection && connection.open;
+    }
+
+    /**
+     * Disconnect and remove a data connection
      * @param {string} remoteID - Remote peer ID
      */
-    disconnectDataChannel (remoteID) {
-        const channel = this.channels.get(remoteID);
-        if (channel) {
-            if (!channel.isClosed()) {
-                channel.close();
+    closeDataConnection (remoteID) {
+        const conn = this.connections.get(remoteID);
+        if (conn) {
+            if (conn.open) {
+                conn.close();
             }
         }
     }
 
     /**
-     * Get the ID of the data channel at a given index
-     * @param {number} index - Channel index
-     * @returns {string} Data channel Mesh ID
+     * Get the ID of the data connection at a given index
+     * @param {number} index - Connection index
+     * @returns {string} Data connection Mesh ID
      */
-    dataChannelIDAt (index) {
-        return Array.from(this.channels.keys())[index];
+    dataConnectionIDAt (index) {
+        return Array.from(this.connections.keys())[index];
     }
 
     /**
-     * Get the number of data channels
-     * @returns {number} Number of data channels
+     * Get the number of data connections
+     * @returns {number} Number of data connections
      */
-    dataChannelCount () {
-        return this.channels.size;
+    dataConnectionCount () {
+        return this.connections.size;
+    }
+
+    /**
+     * Get shared variable
+     * @param {string} key - Variable name
+     * @returns {any} Variable value
+     */
+    sharedVar (key) {
+        return this.sharedVars.get(key);
+    }
+
+    /**
+     * Set shared variable
+     * @param {string} key - Variable name
+     * @param {any} value - Variable value
+     */
+    setSharedVar (key, value) {
+        const data = {
+            sender: this.id,
+            time: Date.now(),
+            type: 'var',
+            key: key,
+            value: value
+        };
+        for (const connection of this.connections.values()) {
+            connection.send(data);
+        }
+        this.sharedVars.set(key, value);
+    }
+
+    /**
+     * Handle incoming shared events
+     * @param {object} event - Shared event object
+     */
+    onSharedEvent (event) {
+        this.lastSharedEvent = event;
+        for (const listener of this.sharedEventListeners) {
+            listener(event);
+        }
+    }
+
+    /**
+     * Dispatch a shared event
+     * @param {string} type - Event type
+     * @param {any} data - Event data
+     * @returns {Promise<void>} Promise that resolves when the event is dispatched
+     */
+    async dispatchSharedEvent (type, data) {
+        const event = {
+            sender: this.id,
+            time: Date.now(),
+            type: 'event',
+            eventType: type,
+            eventData: data
+        };
+        for (const connection of this.connections.values()) {
+            await connection
+                .send(event);
+        }
+        this.onSharedEvent(event);
+    }
+
+    /**
+     * Get the type of the last shared event
+     * @returns {string} Event type
+     */
+    lastSharedEventType () {
+        return this.lastSharedEvent.eventType;
+    }
+
+    /**
+     * Get the data of the last shared event
+     * @returns {any} Event data
+     */
+    lastSharedEventData () {
+        return this.lastSharedEvent.eventData;
     }
 }
 

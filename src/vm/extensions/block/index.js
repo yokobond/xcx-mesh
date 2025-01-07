@@ -105,6 +105,7 @@ class MeshBlocks {
          */
         this.mesh = new Mesh();
         this.mesh.addMeshEventListener(this.onMeshEvent.bind(this));
+        this.mesh.addSharedEventListener(this.onSharedEvent.bind(this));
     }
 
     /**
@@ -112,11 +113,8 @@ class MeshBlocks {
      * @param {object} event - the mesh event.
      */
     onMeshEvent (event) {
-        if (event.type === 'dataChannelConnected') {
-            const channel = this.mesh.getDataChannel(event.data);
-            channel.addSharedEventListener(this.onSharedEvent.bind(this));
-        } else if (event.type === 'dataChannelRequested') {
-            this.runtime.startHats('xcxMesh_whenDataChannelRequested');
+        if (event.type === 'dataConnectionRequested') {
+            this.runtime.startHats('xcxMesh_whenDataConnectionRequested');
         }
     }
 
@@ -172,27 +170,15 @@ class MeshBlocks {
     }
 
     /**
-     * Connect data channel to a remote peer.
+     * Open data connection with a remote peer.
      * @param {object} args - the block's arguments.
-     * @param {object} util - utility object provided by the runtime.
      * @param {string} args.ID - the remote ID.
      * @returns {string} - the result of connecting to the peer.
      */
-    async connectDataChannel (args, util) {
+    async openDataConnection (args) {
         const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (channel) {
-            if (channel.isOpen()) {
-                return `Already connected to peer "${remoteID}"`;
-            }
-            if (channel.isOpening()) {
-                util.yield();
-                return;
-            }
-            channel.close();
-        }
         try {
-            await this.mesh.connectDataChannel(remoteID);
+            await this.mesh.openDataConnection(remoteID);
             return `Connected to peer ${remoteID}`;
         } catch (e) {
             return `Failed to connect to peer ${remoteID}: ${e}`;
@@ -200,62 +186,36 @@ class MeshBlocks {
     }
 
     /**
-     * Check if the data channel is open.
+     * Check if the data connection is open.
      * @param {object} args - the block's arguments.
      * @param {string} args.ID - the remote ID.
      * @returns {boolean} - true if the data channel is open.
      */
-    isDataChannelConnected (args) {
+    isDataConnectionOpen (args) {
         const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (!channel) return false;
-        return channel.isOpen();
+        return this.mesh.isDataConnectionOpen(remoteID);
     }
 
     /**
-     * When the data channel is opened.
-     * @param {object} args - the block's arguments.
-     * @param {object} util - utility object provided by the runtime.
-     * @returns {boolean} - true if the data channel is opened.
-     */
-    whenDataChannelConnected (args, util) {
-        return this.isDataChannelConnected(args, util);
-    }
-
-    /**
-     * When the data channel is closed.
-     * @param {object} args - the block's arguments.
-     * @param {string} args.ID - the remote ID.
-     * @param {object} util - utility object provided by the runtime.
-     * @returns {boolean} - true if the data channel is closed.
-     */
-    whenDataChannelDisconnected (args) {
-        const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (!channel) return false;
-        return !channel.isOpen();
-    }
-
-    /**
-     * Disconnect the peer.
+     * Close the data connection of the remote peer.
      * @param {object} args - the block's arguments.
      * @param {string} args.ID - the remote ID.
      * @returns {Promise<void>} - a promise which resolves after disconnecting the peer.
      */
-    async disconnectDataChannel (args) {
+    async closeDataConnection (args) {
         const remoteID = String(args.ID).trim();
-        await this.mesh.disconnectDataChannel(remoteID);
+        await this.mesh.closeDataConnection(remoteID);
     }
 
     /**
-     * Return the data channel ID at the index.
+     * Return the data connection ID at the index.
      * @param {object} args - arguments for the block.
-     * @param {number} args.CHANNEL_INDEX - the index of the data channel.
-     * @return {string} - the data channel ID.
+     * @param {number} args.CONNECTION_INDEX - the index of the data connection.
+     * @return {string} - the data connection ID.
      */
-    dataChannelIDAt (args) {
-        const index = Cast.toNumber(args.CHANNEL_INDEX) - 1;
-        const remoteID = this.mesh.dataChannelIDAt(index);
+    dataConnectionIDAt (args) {
+        const index = Cast.toNumber(args.CONNECTION_INDEX) - 1;
+        const remoteID = this.mesh.dataConnectionIDAt(index);
         return remoteID ? remoteID : '';
     }
 
@@ -263,23 +223,19 @@ class MeshBlocks {
      * Return the number of data channels.
      * @returns {number} - the number of data channels.
      */
-    dataChannelCount () {
-        return this.mesh.dataChannelCount();
+    dataConnectionCount () {
+        return this.mesh.dataConnectionCount();
     }
 
     /**
      * Return the value of the key.
      * @param {object} args - arguments for the block.
-     * @param {string} args.ID - the remote ID.
      * @param {string} args.KEY - the key.
      * @return {string} - the value of the key.
      */
     sharedVar (args) {
-        const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (!channel) return '';
         const key = String(args.KEY).trim();
-        return channel.sharedVar(key) || '';
+        return this.mesh.sharedVar(key) || '';
     }
 
     /**
@@ -291,49 +247,30 @@ class MeshBlocks {
      * @return {string} - the result of setting the value.
      */
     setSharedVar (args) {
-        const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (!channel) return 'data channel is not connected';
         const key = String(args.KEY).trim();
         const value = Cast.toString(args.VALUE);
-        channel.setSharedVar(key, value)
-            .catch(e => `Failed to set "${key}" to "${value}" in ${remoteID}: ${e}`);
-        // Do not wait for the promise to resolve for performance reasons.
-    }
-
-    /**
-     * Return the remote ID of the peer which sent the last event.
-     * @returns {string?} - the remote ID of the peer.
-     */
-    lastSharedEventChannelID () {
-        const channelID = this.mesh.lastSharedEventChannelID;
-        return channelID ? channelID : '';
+        try {
+            this.mesh.setSharedVar(key, value);
+        } catch (e) {
+            return `Failed to set "${key}" to "${value}": ${e}`;
+        }
+        return `Set "${key}" to "${value}"`;
     }
 
     /**
      * Return the last event type.
-     * @param {object} args - arguments for the block.
-     * @param {string} args.ID - the remote ID.
      * @return {string} - the last event type.
      */
-    lastSharedEventType (args) {
-        const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (!channel) return '';
-        return channel.lastSharedEventType() || '';
+    lastSharedEventType () {
+        return this.mesh.lastSharedEventType() || '';
     }
 
     /**
      * Return the last event data.
-     * @param {object} args - arguments for the block.
-     * @param {string} args.ID - the remote ID.
      * @return {string} - the last event data.
      */
-    lastSharedEventData (args) {
-        const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (!channel) return '';
-        return channel.lastSharedEventData() || '';
+    lastSharedEventData () {
+        return this.mesh.lastSharedEventData() || '';
     }
 
     /**
@@ -341,17 +278,13 @@ class MeshBlocks {
      * @param {object} args - arguments for the block.
      * @param {string} args.TYPE - the event type.
      * @param {string} args.DATA - the event data.
-     * @param {string} args.ID - the remote ID.
      * @return {Promise<string>} - resolve with the result of sending the event.
      */
     dispatchSharedEvent (args) {
-        const remoteID = String(args.ID).trim();
-        const channel = this.mesh.getDataChannel(remoteID);
-        if (!channel) return Promise.resolve(`data channel for ${remoteID} is not connected`);
         const type = String(args.TYPE).trim();
         const data = Cast.toString(args.DATA);
-        return channel.dispatchSharedEvent(type, data)
-            .catch(e => `Failed to dispatch event "${type}" to ${remoteID}: ${e}`);
+        return this.mesh.dispatchSharedEvent(type, data)
+            .catch(e => `Failed to dispatch event "${type}": ${e}`);
     }
 
     /**
@@ -417,123 +350,87 @@ class MeshBlocks {
                 },
                 '---',
                 {
-                    opcode: 'connectDataChannel',
+                    opcode: 'openDataConnection',
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
-                        id: 'xcxMesh.connectDataChannel',
-                        default: 'connect data channel with [ID]'
+                        id: 'xcxMesh.openDataConnection',
+                        default: 'open connection to [ID]'
                     }),
                     arguments: {
                         ID: {
                             type: ArgumentType.STRING,
                             defaultValue: formatMessage({
-                                id: 'xcxMesh.connectDataChannel.defaultID',
+                                id: 'xcxMesh.openDataConnection.defaultID',
                                 default: 'remoteID'
                             })
                         }
                     }
                 },
                 {
-                    opcode: 'whenDataChannelConnected',
-                    blockType: BlockType.HAT,
-                    isEdgeActivated: true,
-                    text: formatMessage({
-                        id: 'xcxMesh.whenDataChannelConnected',
-                        default: 'when data channel for [ID] connected'
-                    }),
-                    arguments: {
-                        ID: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'xcxMesh.whenDataChannelConnected.defaultID',
-                                default: 'remoteID'
-                            })
-                        }
-                    }
-                },
-                {
-                    opcode: 'whenDataChannelDisconnected',
-                    blockType: BlockType.HAT,
-                    isEdgeActivated: true,
-                    text: formatMessage({
-                        id: 'xcxMesh.whenDataChannelDisconnected',
-                        default: 'when data channel for [ID] disconnected'
-                    }),
-                    arguments: {
-                        ID: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'xcxMesh.whenDataChannelDisconnected.defaultID',
-                                default: 'remoteID'
-                            })
-                        }
-                    }
-                },
-                {
-                    opcode: 'isDataChannelConnected',
+                    opcode: 'isDataConnectionOpen',
                     blockType: BlockType.BOOLEAN,
                     text: formatMessage({
-                        id: 'xcxMesh.isDataChannelConnected',
-                        default: 'data channel for [ID] is connected'
+                        id: 'xcxMesh.isDataConnectionOpen',
+                        default: 'connection to [ID] is open'
                     }),
                     arguments: {
                         ID: {
                             type: ArgumentType.STRING,
                             defaultValue: formatMessage({
-                                id: 'xcxMesh.isDataChannelConnected.defaultID',
+                                id: 'xcxMesh.isDataConnectionOpen.defaultID',
                                 default: 'remoteID'
                             })
                         }
                     }
                 },
                 {
-                    opcode: 'disconnectDataChannel',
+                    opcode: 'closeDataConnection',
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
-                        id: 'xcxMesh.disconnectDataChannel',
-                        default: 'disconnect data channel for [ID]'
+                        id: 'xcxMesh.closeDataConnection',
+                        default: 'close connection to [ID]'
                     }),
                     arguments: {
                         ID: {
                             type: ArgumentType.STRING,
                             defaultValue: formatMessage({
-                                id: 'xcxMesh.disconnectDataChannel.defaultID',
+                                id: 'xcxMesh.closeDataConnection.defaultID',
                                 default: 'remoteID'
                             })
                         }
                     }
                 },
                 {
-                    opcode: 'whenDataChannelRequested',
+                    opcode: 'whenDataConnectionRequested',
                     blockType: BlockType.EVENT,
                     isEdgeActivated: false,
                     text: formatMessage({
-                        id: 'xcxMesh.whenDataChannelRequested',
-                        default: 'when data channel requested'
+                        id: 'xcxMesh.whenDataConnectionRequested',
+                        default: 'when connection requested'
                     })
                 },
                 {
-                    opcode: 'dataChannelIDAt',
+                    opcode: 'dataConnectionIDAt',
                     blockType: BlockType.REPORTER,
                     disableMonitor: true,
                     text: formatMessage({
-                        id: 'xcxMesh.dataChannelIDAt',
-                        default: 'data channel ID at [CHANNEL_INDEX]'
+                        id: 'xcxMesh.dataConnectionIDAt',
+                        default: 'connection ID at [CONNECTION_INDEX]'
                     }),
                     arguments: {
-                        CHANNEL_INDEX: {
+                        CONNECTION_INDEX: {
                             type: ArgumentType.NUMBER,
                             defaultValue: 1
                         }
                     }
                 },
                 {
-                    opcode: 'dataChannelCount',
+                    opcode: 'dataConnectionCount',
                     blockType: BlockType.REPORTER,
                     disableMonitor: true,
                     text: formatMessage({
-                        id: 'xcxMesh.dataChannelCount',
-                        default: 'data channel count'
+                        id: 'xcxMesh.dataConnectionCount',
+                        default: 'connection count'
                     })
                 },
                 '---',
@@ -543,7 +440,7 @@ class MeshBlocks {
                     blockAllThreads: false,
                     text: formatMessage({
                         id: 'xcxMesh.setSharedVar',
-                        default: 'set value of [KEY] to [VALUE] in channel with [ID]'
+                        default: 'set value of [KEY] to [VALUE]'
                     }),
                     arguments: {
                         KEY: {
@@ -559,13 +456,6 @@ class MeshBlocks {
                                 id: 'xcxMesh.setSharedVar.defaultValue',
                                 default: 'value'
                             })
-                        },
-                        ID: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'xcxMesh.setSharedVar.defaultID',
-                                default: 'remoteID'
-                            })
                         }
                     }
                 },
@@ -575,7 +465,7 @@ class MeshBlocks {
                     blockAllThreads: false,
                     text: formatMessage({
                         id: 'xcxMesh.sharedVar',
-                        default: 'value of [KEY] in channel with [ID]'
+                        default: 'value of [KEY]'
                     }),
                     arguments: {
                         KEY: {
@@ -583,13 +473,6 @@ class MeshBlocks {
                             defaultValue: formatMessage({
                                 id: 'xcxMesh.sharedVar.defaultKey',
                                 default: 'key'
-                            })
-                        },
-                        ID: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'xcxMesh.sharedVar.defaultID',
-                                default: 'remoteID'
                             })
                         }
                     }
@@ -600,7 +483,7 @@ class MeshBlocks {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'xcxMesh.dispatchSharedEvent',
-                        default: 'dispatch event [TYPE] with [DATA] in channel [ID]'
+                        default: 'dispatch event [TYPE] with [DATA]'
                     }),
                     arguments: {
                         TYPE: {
@@ -616,13 +499,6 @@ class MeshBlocks {
                                 id: 'xcxMesh.dispatchSharedEvent.defaultData',
                                 default: 'data'
                             })
-                        },
-                        ID: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'xcxMesh.dispatchSharedEvent.defaultID',
-                                default: 'remoteID'
-                            })
                         }
                     }
                 },
@@ -637,30 +513,14 @@ class MeshBlocks {
                     })
                 },
                 {
-                    opcode: 'lastSharedEventChannelID',
-                    blockType: BlockType.REPORTER,
-                    disableMonitor: true,
-                    text: formatMessage({
-                        id: 'xcxMesh.lastSharedEventChannelID',
-                        default: 'channel ID of the last event'
-                    })
-                },
-                {
                     opcode: 'lastSharedEventType',
                     blockType: BlockType.REPORTER,
                     disableMonitor: true,
                     text: formatMessage({
                         id: 'xcxMesh.lastSharedEventType',
-                        default: 'event in channel [ID]'
+                        default: 'event type'
                     }),
                     arguments: {
-                        ID: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'xcxMesh.lastSharedEventType.defaultID',
-                                default: 'remoteID'
-                            })
-                        }
                     }
                 },
                 {
@@ -669,16 +529,9 @@ class MeshBlocks {
                     disableMonitor: true,
                     text: formatMessage({
                         id: 'xcxMesh.lastSharedEventData',
-                        default: 'data of event in channel [ID]'
+                        default: 'event data'
                     }),
                     arguments: {
-                        ID: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'xcxMesh.lastSharedEventData.defaultID',
-                                default: 'remoteID'
-                            })
-                        }
                     }
                 }
             ],
