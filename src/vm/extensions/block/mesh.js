@@ -95,6 +95,17 @@ class Mesh {
         }
     }
 
+    /**
+     * Set ICE servers configuration
+     * @param {string} servers - ICE servers configuration in JSON format
+     */
+    setICEServers (servers) {
+        if (servers.charAt(0) !== '[') {
+            servers = `[${servers}]`;
+        }
+        const serversData = JSON.parse(servers);
+        this.ICEServers = serversData;
+    }
 
     /**
      * Open a peer connection.

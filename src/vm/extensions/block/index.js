@@ -170,6 +170,22 @@ class MeshBlocks {
     }
 
     /**
+     * Set ICE servers.
+     * @param {object} args - arguments for the block.
+     * @param {string} args.SERVERS - the ICE servers.
+     * @return {string} - the result of setting the ICE servers.
+     */
+    setICEServers (args) {
+        const servers = String(args.SERVERS).trim();
+        try {
+            this.mesh.setICEServers(servers);
+            return `ICE servers set to "${servers}"`;
+        } catch (e) {
+            return `Failed to set ICE servers: ${e}`;
+        }
+    }
+
+    /**
      * Open data connection with a remote peer.
      * @param {object} args - the block's arguments.
      * @param {string} args.ID - the remote ID.
@@ -347,6 +363,20 @@ class MeshBlocks {
                         id: 'xcxMesh.closePeer',
                         default: 'close peer'
                     })
+                },
+                {
+                    opcode: 'setICEServers',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'xcxMesh.setICEServers',
+                        default: 'set ICE servers to [SERVERS]'
+                    }),
+                    arguments: {
+                        SERVERS: {
+                            type: ArgumentType.STRING,
+                            defaultValue: ' '
+                        }
+                    }
                 },
                 '---',
                 {
