@@ -134,25 +134,34 @@ class Mesh {
                 this.id = decodeFromPeerID(peerID);
                 this.peer.on('connection', requested => {
                     const remoteID = decodeFromPeerID(requested.peer);
-                    new Promise((resolveRequest, rejectRequest) => {
-                        requested.on('open', () => {
-                            this._setupDataConnection(requested, remoteID);
-                            this._registerDataConnection(requested, remoteID);
-                            resolveRequest();
-                        });
-                        requested.on('error', err => {
-                            rejectRequest(new Error(err));
-                        });
-                    })
-                        .then(() => {
-                            this.eventListeners.forEach(listener => {
-                                listener(
-                                    {
-                                        type: 'dataConnectionRequested',
-                                        data: remoteID
-                                    });
-                            });
-                        });
+                    requested.on('open', () => {
+                        const onSyncAnswer = data => {
+                            if (data.type === 'control' && data.command === 'syncAnswer') {
+                                data.vars.forEach(([key, value]) => {
+                                    this.setSharedVar(key, value);
+                                });
+                                requested.off('data', onSyncAnswer);
+                                this._setupDataConnection(requested, remoteID);
+                                this._registerDataConnection(requested, remoteID);
+                                this.eventListeners.forEach(listener => {
+                                    listener(
+                                        {
+                                            type: 'dataConnectionRequested',
+                                            data: remoteID
+                                        });
+                                });
+                            }
+                        };
+                        requested.on('data', onSyncAnswer);
+                        const syncRequest = {
+                            sender: this.id,
+                            time: Date.now(),
+                            type: 'control',
+                            command: 'syncRequest',
+                            vars: Array.from(this.sharedVars)
+                        };
+                        requested.send(syncRequest);
+                    });
                 });
                 resolve(this.peer);
             });
@@ -266,16 +275,33 @@ class Mesh {
         const newConnection = this.peer.connect(encodeToPeerID(remoteID));
         return new Promise((resolve, reject) => {
             newConnection.on('open', () => {
-                this._setupDataConnection(newConnection, remoteID);
-                this._registerDataConnection(newConnection, remoteID);
-                this.eventListeners.forEach(listener => {
-                    listener(
-                        {
-                            type: 'dataConnectionOpened',
-                            data: remoteID
+                const onSyncRequest = data => {
+                    if (data.type === 'control' && data.command === 'syncRequest') {
+                        data.vars.forEach(([key, value]) => {
+                            this.setSharedVar(key, value);
                         });
-                });
-                resolve(newConnection);
+                        const syncAnswer = {
+                            sender: this.id,
+                            time: Date.now(),
+                            type: 'control',
+                            command: 'syncAnswer',
+                            vars: Array.from(this.sharedVars)
+                        };
+                        newConnection.send(syncAnswer);
+                        newConnection.off('data', onSyncRequest);
+                        this._setupDataConnection(newConnection, remoteID);
+                        this._registerDataConnection(newConnection, remoteID);
+                        this.eventListeners.forEach(listener => {
+                            listener(
+                                {
+                                    type: 'dataConnectionOpened',
+                                    data: remoteID
+                                });
+                        });
+                        resolve(newConnection);
+                    }
+                };
+                newConnection.on('data', onSyncRequest);
             });
             newConnection.on('error', err => {
                 reject(err);
@@ -330,6 +356,19 @@ class Mesh {
      */
     dataConnectionCount () {
         return this.connections.size;
+    }
+
+    sendSyncRequest () {
+        const data = {
+            sender: this.id,
+            time: Date.now(),
+            type: 'control',
+            command: 'syncRequest',
+            vars: Object.fromEntries(this.sharedVars)
+        };
+        for (const connection of this.connections.values()) {
+            connection.send(data);
+        }
     }
 
     /**
