@@ -49,10 +49,12 @@ class Mesh {
         this.eventListeners = [];
         /** @type {Map<string, any>} Map of shared variables */
         this.sharedVars = new Map();
-        /** @type {{sender: string, time: number, type: string, data: any}} Last shared event */
-        this.lastSharedEvent = {sender: '', time: 0, type: '', data: ''};
-        /** @type {Array<Function>} Shared event listener callback */
-        this.sharedEventListeners = [];
+        /** @type {Array<{sender: string, time: number, type: string, data: any}>} Shared event buffer */
+        this.sharedEventBuffer = [];
+        /** @type {number} Length of the shared event buffer */
+        this.sharedEventBufferLength = 10;
+        /** @type {number} Index of the last shared event processed */
+        this.sharedEventIndex = 0;
     }
 
     /**
@@ -73,27 +75,6 @@ class Mesh {
         const index = this.eventListeners.indexOf(listener);
         if (index > -1) {
             this.eventListeners.splice(index, 1);
-        }
-    }
-
-    /**
-     * Add a listener for shared events
-     * @param {Function} listener - Callback function for events
-     * @returns {void}
-     */
-    addSharedEventListener (listener) {
-        this.sharedEventListeners.push(listener);
-    }
-
-    /**
-     * Remove a listener for shared events
-     * @param {Function} listener - Callback function for events
-     * @returns {void}
-     */
-    removeSharedEventListener (listener) {
-        const index = this.sharedEventListeners.indexOf(listener);
-        if (index > -1) {
-            this.sharedEventListeners.splice(index, 1);
         }
     }
 
@@ -237,8 +218,16 @@ class Mesh {
                 }
             } else if (data.type === 'event') {
                 if (data.sender === this.id) return;
-                if (data.sender !== this.lastSharedEvent.sender ||
-                    data.time !== this.lastSharedEvent.time) {
+                const received = this.sharedEventBuffer.length > 0 &&
+                    this.sharedEventBuffer
+                        .every(event =>
+                            event.sender === data.sender &&
+                        event.time === data.time &&
+                        event.type === data.type &&
+                        event.eventType === data.eventType &&
+                        event.eventData === data.eventData
+                        );
+                if (!received) {
                     this.connections.forEach(conn => {
                         if (conn !== connection) {
                             conn.send(data);
@@ -421,13 +410,28 @@ class Mesh {
     }
 
     /**
+     * Get first shared event of the buffer
+     * @returns {object|undefined} Shared event object
+     */
+    nextSharedEvent () {
+        if (this.sharedEventBuffer.length <= this.sharedEventIndex) return;
+        const event = this.sharedEventBuffer[this.sharedEventIndex];
+        this.sharedEventIndex++;
+        return event;
+    }
+
+    /**
      * Handle incoming shared events
      * @param {object} event - Shared event object
      */
     onSharedEvent (event) {
-        this.lastSharedEvent = event;
-        for (const listener of this.sharedEventListeners) {
-            listener(event);
+        this.sharedEventBuffer.push(event);
+        if (this.sharedEventBuffer.length > this.sharedEventBufferLength) {
+            this.sharedEventBuffer.shift();
+            this.sharedEventIndex--;
+            if (this.sharedEventIndex < 0) {
+                this.sharedEventIndex = 0;
+            }
         }
     }
 
@@ -435,9 +439,8 @@ class Mesh {
      * Dispatch a shared event
      * @param {string} type - Event type
      * @param {any} data - Event data
-     * @returns {Promise<void>} Promise that resolves when the event is dispatched
      */
-    async dispatchSharedEvent (type, data) {
+    dispatchSharedEvent (type, data) {
         const event = {
             sender: this.id,
             time: Date.now(),
@@ -446,26 +449,10 @@ class Mesh {
             eventData: data
         };
         for (const connection of this.connections.values()) {
-            await connection
+            connection
                 .send(event);
         }
         this.onSharedEvent(event);
-    }
-
-    /**
-     * Get the type of the last shared event
-     * @returns {string} Event type
-     */
-    lastSharedEventType () {
-        return this.lastSharedEvent.eventType;
-    }
-
-    /**
-     * Get the data of the last shared event
-     * @returns {any} Event data
-     */
-    lastSharedEventData () {
-        return this.lastSharedEvent.eventData;
     }
 }
 

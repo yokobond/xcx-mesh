@@ -105,7 +105,14 @@ class MeshBlocks {
          */
         this.mesh = new Mesh();
         this.mesh.addMeshEventListener(this.onMeshEvent.bind(this));
-        this.mesh.addSharedEventListener(this.onSharedEvent.bind(this));
+
+        /** @type {object} the current processing event */
+        this.processingSharedEvent = null;
+        /** @type {number} the interval for polling the shared event */
+        this.sharedEventPollingInterval = 10;
+        /** @type {number} the interval for checking the completion of the shared event */
+        this.eventCompletionCheckInterval = 10;
+        this.startSharedEventProcessing();
     }
 
     /**
@@ -294,7 +301,8 @@ class MeshBlocks {
      * @return {string} - the last event type.
      */
     lastSharedEventType () {
-        return this.mesh.lastSharedEventType() || '';
+        const event = this.processingSharedEvent;
+        return (event && event.eventType) || '';
     }
 
     /**
@@ -302,7 +310,8 @@ class MeshBlocks {
      * @return {string} - the last event data.
      */
     lastSharedEventData () {
-        return this.mesh.lastSharedEventData() || '';
+        const event = this.processingSharedEvent;
+        return (event && event.eventData) || '';
     }
 
     /**
@@ -315,8 +324,11 @@ class MeshBlocks {
     dispatchSharedEvent (args) {
         const type = String(args.TYPE).trim();
         const data = Cast.toString(args.DATA);
-        return this.mesh.dispatchSharedEvent(type, data)
-            .catch(e => `Failed to dispatch event "${type}": ${e}`);
+        try {
+            this.mesh.dispatchSharedEvent(type, data);
+        } catch (e) {
+            return `Failed to dispatch event "${type}": ${e}`;
+        }
     }
 
     /**
@@ -324,6 +336,54 @@ class MeshBlocks {
      */
     onSharedEvent () {
         this.runtime.startHats('xcxMesh_whenSharedEventReceived');
+    }
+
+    /**
+     * Start the shared event processing.
+     * This is called when the project is started.
+     * This gets a next event from the mesh and process it then repeat.
+     * This is called only once.
+     */
+    startSharedEventProcessing () {
+        const blocks = this;
+        const nextEvent = () => {
+            const event = blocks.mesh.nextSharedEvent();
+            if (event) {
+                this.processingSharedEvent = event;
+                blocks.processSharedEvent(event, nextEvent);
+            } else {
+                setTimeout(nextEvent, this.sharedEventPollingInterval);
+            }
+        };
+        setTimeout(nextEvent, 0);
+    }
+
+    /**
+     * Process the shared event with the callback.
+     * The callback will be called after the all started threads are finished.
+     * @param {object} event - the shared event.
+     * @param {Function} onCompletion - the callback function.
+     */
+    processSharedEvent (event, onCompletion) {
+        // Have we run before, starting threads?
+        if (!event.startedThreads) {
+            // No - start hats for this broadcast.
+            event.startedThreads = this.runtime.startHats('xcxMesh_whenSharedEventReceived');
+            if (event.startedThreads.length === 0) {
+                // Nothing was started.
+                return;
+            }
+        }
+        // We've run before; check if the wait is still going on.
+        const waiting = event.startedThreads
+            .some(thread => this.runtime.threads.indexOf(thread) !== -1);
+        if (waiting) {
+            setTimeout(() => {
+                this.processSharedEvent(event, onCompletion);
+            }, this.eventCompletionCheckInterval);
+        } else {
+            onCompletion();
+        }
     }
 
     /**

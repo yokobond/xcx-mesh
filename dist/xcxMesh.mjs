@@ -1111,81 +1111,63 @@ var Cast$1 = /*@__PURE__*/getDefaultExportFromCjs(cast);
 
 var en = {
 	"xcxMesh.name": "Mesh",
-	"xcxMesh.doIt": "do it [SCRIPT]",
 	"xcxMesh.openPeer": "open peer [ID]",
 	"xcxMesh.openPeer.defaultID": "myID",
 	"xcxMesh.myID": "my ID",
 	"xcxMesh.isPeerOpen": "peer is open",
 	"xcxMesh.closePeer": "close peer",
-	"xcxMesh.connectDataChannel": "connect data channel with [ID]",
-	"xcxMesh.connectDataChannel.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelConnected": "when data channel for [ID] connected",
-	"xcxMesh.whenDataChannelConnected.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelDisconnected": "when data channel for [ID] disconnected",
-	"xcxMesh.whenDataChannelDisconnected.defaultID": "remoteID",
-	"xcxMesh.isDataChannelConnected": "data channel for [ID] is connected",
-	"xcxMesh.isDataChannelConnected.defaultID": "remoteID",
-	"xcxMesh.disconnectDataChannel": "disconnect data channel for [ID]",
-	"xcxMesh.disconnectDataChannel.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelRequested": "when data channel requested",
-	"xcxMesh.dataChannelIDAt": "data channel ID at [CHANNEL_INDEX]",
-	"xcxMesh.dataChannelCount": "data channel count",
-	"xcxMesh.setSharedVar": "set value of [KEY] to [VALUE] in channel with [ID]",
+	"xcxMesh.setPeerServer": "set peer server to [SERVER]",
+	"xcxMesh.setICEServers": "set ICE servers to [SERVERS]",
+	"xcxMesh.openDataConnection": "open connection to [ID]",
+	"xcxMesh.openDataConnection.defaultID": "remoteID",
+	"xcxMesh.isDataConnectionOpen": "connection to [ID] is open",
+	"xcxMesh.isDataConnectionOpen.defaultID": "remoteID",
+	"xcxMesh.closeDataConnection": "close connection to [ID]",
+	"xcxMesh.closeDataConnection.defaultID": "remoteID",
+	"xcxMesh.whenDataConnectionRequested": "when connection requested",
+	"xcxMesh.dataConnectionIDAt": "connection ID at [CONNECTION_INDEX]",
+	"xcxMesh.dataConnectionCount": "connection count",
+	"xcxMesh.setSharedVar": "set value of [KEY] to [VALUE]",
 	"xcxMesh.setSharedVar.defaultKey": "key",
 	"xcxMesh.setSharedVar.defaultValue": "value",
-	"xcxMesh.setSharedVar.defaultID": "remoteID",
-	"xcxMesh.sharedVar": "value of [KEY] in channel with [ID]",
+	"xcxMesh.sharedVar": "value of [KEY]",
 	"xcxMesh.sharedVar.defaultKey": "key",
-	"xcxMesh.sharedVar.defaultID": "remoteID",
-	"xcxMesh.dispatchSharedEvent": "dispatch event [TYPE] with [DATA] in channel [ID]",
+	"xcxMesh.dispatchSharedEvent": "dispatch event [TYPE] with [DATA]",
 	"xcxMesh.dispatchSharedEvent.defaultEvent": "event",
 	"xcxMesh.dispatchSharedEvent.defaultData": "data",
-	"xcxMesh.dispatchSharedEvent.defaultID": "remoteID",
 	"xcxMesh.whenSharedEventReceived": "when event received",
-	"xcxMesh.lastSharedEventChannelID": "channel ID of the last event",
-	"xcxMesh.lastSharedEventType": "event in channel [ID]",
-	"xcxMesh.lastSharedEventType.defaultID": "remoteID",
-	"xcxMesh.lastSharedEventData": "data of event in channel [ID]",
-	"xcxMesh.lastSharedEventData.defaultID": "remoteID"
+	"xcxMesh.lastSharedEventType": "event type",
+	"xcxMesh.lastSharedEventData": "event data"
 };
 var ja = {
 	"xcxMesh.name": "Mesh",
-	"xcxMesh.doIt": "[SCRIPT] を実行する",
 	"xcxMesh.openPeer": "ピア [ID] を開く",
 	"xcxMesh.openPeer.defaultID": "myID",
 	"xcxMesh.myID": "自分のID",
 	"xcxMesh.isPeerOpen": "ピアが開いている",
 	"xcxMesh.closePeer": "ピアを閉じる",
-	"xcxMesh.connectDataChannel": "[ID] とデータチャンネルを接続する",
-	"xcxMesh.connectDataChannel.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelConnected": "[ID] とのデータチャンネルが接続されたとき",
-	"xcxMesh.whenDataChannelConnected.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelDisconnected": "[ID] とのデータチャンネルが切断されたとき",
-	"xcxMesh.whenDataChannelDisconnected.defaultID": "remoteID",
-	"xcxMesh.isDataChannelConnected": "[ID] とのデータチャンネルが接続されている",
-	"xcxMesh.isDataChannelConnected.defaultID": "remoteID",
-	"xcxMesh.disconnectDataChannel": "[ID] とのデータチャンネルを切断する",
-	"xcxMesh.disconnectDataChannel.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelRequested": "データチャンネルが要求されたとき",
-	"xcxMesh.dataChannelIDAt": "[CHANNEL_INDEX] 番目のデータチャンネルのID",
-	"xcxMesh.dataChannelCount": "データチャンネルの数",
-	"xcxMesh.setSharedVar": "[ID] とのデータチャンネルの [KEY] に [VALUE] を設定する",
+	"xcxMesh.setPeerServer": "ピアサーバーを [SERVER] にする",
+	"xcxMesh.setICEServers": "ICEサーバーを [SERVERS] にする",
+	"xcxMesh.openDataConnection": "[ID] と接続する",
+	"xcxMesh.openDataConnection.defaultID": "remoteID",
+	"xcxMesh.isDataConnectionOpen": "[ID] と接続している",
+	"xcxMesh.isDataConnectionOpen.defaultID": "remoteID",
+	"xcxMesh.closeDataConnection": "[ID] を切断する",
+	"xcxMesh.closeDataConnection.defaultID": "remoteID",
+	"xcxMesh.whenDataConnectionRequested": "接続が要求されたとき",
+	"xcxMesh.dataConnectionIDAt": "[CONNECTION_INDEX] 番目の接続ID",
+	"xcxMesh.dataConnectionCount": "接続数",
+	"xcxMesh.setSharedVar": "[KEY] を [VALUE] にする",
 	"xcxMesh.setSharedVar.defaultKey": "key",
 	"xcxMesh.setSharedVar.defaultValue": "value",
-	"xcxMesh.setSharedVar.defaultID": "remoteID",
-	"xcxMesh.sharedVar": "[ID] とのデータチャンネルの [KEY] の値",
+	"xcxMesh.sharedVar": "[KEY] の値",
 	"xcxMesh.sharedVar.defaultKey": "key",
-	"xcxMesh.sharedVar.defaultID": "remoteID",
-	"xcxMesh.dispatchSharedEvent": "[ID] とのデータチャンネルに [TYPE] イベントを [DATA] と共に送る",
+	"xcxMesh.dispatchSharedEvent": "[TYPE] イベントを [DATA] と共に送る",
 	"xcxMesh.dispatchSharedEvent.defaultEvent": "event",
 	"xcxMesh.dispatchSharedEvent.defaultData": "data",
-	"xcxMesh.dispatchSharedEvent.defaultID": "remoteID",
 	"xcxMesh.whenSharedEventReceived": "イベントを受け取ったとき",
-	"xcxMesh.lastSharedEventChannelID": "最後のイベントのデータチャンネルID",
-	"xcxMesh.lastSharedEventType": "[ID] とのデータチャンネルのイベント",
-	"xcxMesh.lastSharedEventType.defaultID": "remoteID",
-	"xcxMesh.lastSharedEventData": "[ID] とのデータチャンネルのイベントのデータ",
-	"xcxMesh.lastSharedEventData.defaultID": "remoteID"
+	"xcxMesh.lastSharedEventType": "イベントのタイプ",
+	"xcxMesh.lastSharedEventData": "イベントのデータ"
 };
 var translations = {
 	en: en,
@@ -1197,40 +1179,83 @@ var translations = {
 	"xcxMesh.myID": "じぶんのID",
 	"xcxMesh.isPeerOpen": "ピア が ひらいている",
 	"xcxMesh.closePeer": "ピア を とじる",
-	"xcxMesh.connectDataChannel": "[ID] と データチャンネル を せつぞくする",
-	"xcxMesh.connectDataChannel.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelConnected": "[ID] との データチャンネル が せつぞくされた とき",
-	"xcxMesh.whenDataChannelConnected.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelDisconnected": "[ID] との データチャンネル が せつだんされた とき",
-	"xcxMesh.whenDataChannelDisconnected.defaultID": "remoteID",
-	"xcxMesh.isDataChannelConnected": "[ID] との データチャンネル が せつぞくされている",
-	"xcxMesh.isDataChannelConnected.defaultID": "remoteID",
-	"xcxMesh.disconnectDataChannel": "[ID] との データチャンネル を せつだんする",
-	"xcxMesh.disconnectDataChannel.defaultID": "remoteID",
-	"xcxMesh.whenDataChannelRequested": "データチャンネル が ようきゅうされた とき",
-	"xcxMesh.dataChannelIDAt": "[CHANNEL_INDEX] ばんめ の データチャンネル の ID",
-	"xcxMesh.dataChannelCount": "データチャンネル の かず",
-	"xcxMesh.setSharedVar": "[ID] との データチャンネル の [KEY] に [VALUE] を せっていする",
+	"xcxMesh.setPeerServer": "ピアサーバー を [SERVER] に する",
+	"xcxMesh.setICEServers": "ICEサーバー を [SERVERS] に する",
+	"xcxMesh.openDataConnection": "[ID] と せつぞく する",
+	"xcxMesh.openDataConnection.defaultID": "remoteID",
+	"xcxMesh.isDataConnectionOpen": "[ID] と せつぞく している",
+	"xcxMesh.isDataConnectionOpen.defaultID": "remoteID",
+	"xcxMesh.closeDataConnection": "[ID] と せつだん する",
+	"xcxMesh.closeDataConnection.defaultID": "remoteID",
+	"xcxMesh.whenDataConnectionRequested": "せつぞく が ようきゅうされた とき",
+	"xcxMesh.dataConnectionIDAt": "[CONNECTION_INDEX] ばんめ の せつぞくID",
+	"xcxMesh.dataConnectionCount": "せつぞくのかず",
+	"xcxMesh.setSharedVar": "[KEY] を [VALUE] に する",
 	"xcxMesh.setSharedVar.defaultKey": "key",
 	"xcxMesh.setSharedVar.defaultValue": "value",
-	"xcxMesh.setSharedVar.defaultID": "remoteID",
-	"xcxMesh.sharedVar": "[ID] との データチャンネル の [KEY] の あたい",
+	"xcxMesh.sharedVar": "[KEY] の あたい",
 	"xcxMesh.sharedVar.defaultKey": "key",
-	"xcxMesh.sharedVar.defaultID": "remoteID",
-	"xcxMesh.dispatchSharedEvent": "[ID] との データチャンネル に [TYPE] イベント を [DATA] と ともに おくる",
+	"xcxMesh.dispatchSharedEvent": "[TYPE] イベント を [DATA] と ともに おくる",
 	"xcxMesh.dispatchSharedEvent.defaultEvent": "event",
 	"xcxMesh.dispatchSharedEvent.defaultData": "data",
-	"xcxMesh.dispatchSharedEvent.defaultID": "remoteID",
 	"xcxMesh.whenSharedEventReceived": "イベント を うけとった とき",
-	"xcxMesh.lastSharedEventChannelID": "さいご の イベント の データチャンネルID",
-	"xcxMesh.lastSharedEventType": "[ID] との データチャンネル の イベント",
-	"xcxMesh.lastSharedEventType.defaultID": "remoteID",
-	"xcxMesh.lastSharedEventData": "[ID] との データチャンネル の イベント の データ",
-	"xcxMesh.lastSharedEventData.defaultID": "remoteID"
+	"xcxMesh.lastSharedEventType": "イベント の タイプ",
+	"xcxMesh.lastSharedEventData": "イベント の データ"
 }
 };
 
 var img = "data:image/png;base64,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";
+
+function _arrayWithHoles(r) {
+  if (Array.isArray(r)) return r;
+}
+
+function _iterableToArrayLimit(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e,
+      n,
+      i,
+      u,
+      a = [],
+      f = !0,
+      o = !1;
+    try {
+      if (i = (t = t.call(r)).next, 0 === l) ; else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+    } catch (r) {
+      o = !0, n = r;
+    } finally {
+      try {
+        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
+      } finally {
+        if (o) throw n;
+      }
+    }
+    return a;
+  }
+}
+
+function _arrayLikeToArray$1(r, a) {
+  (null == a || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
+}
+
+function _unsupportedIterableToArray$1(r, a) {
+  if (r) {
+    if ("string" == typeof r) return _arrayLikeToArray$1(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray$1(r, a) : void 0;
+  }
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _slicedToArray(r, e) {
+  return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray$1(r, e) || _nonIterableRest();
+}
 
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -1274,327 +1299,6 @@ var decodeFromPeerID = function decodeFromPeerID(peerID) {
 };
 
 /**
- * Class representing a data channel for peer-to-peer communication
- */
-var SharedDataChannel = /*#__PURE__*/function () {
-  /**
-   * Create a DataChannel instance
-   * @param {Peer} peer - PeerJS instance
-   * @param {string|null} remoteID - ID of the remote peer
-   */
-  function SharedDataChannel(peer, remoteID) {
-    _classCallCheck$1(this, SharedDataChannel);
-    if (!peer) throw new Error('Peer not set');
-
-    /** @type {Peer} PeerJS instance */
-    this.peer = peer;
-    /** @type {string|null} ID of the remote peer */
-    this.remoteID = remoteID;
-    /** @type {DataConnection|null} PeerJS DataConnection instance */
-    this.connection = null;
-    /** @type {string} Connection state */
-    this.state = 'created';
-    /** @type {Map<string, any>} Map of shared variables */
-    this.sharedVars = new Map();
-    /** @type {{type: string, data: any}} Last received event */
-    this._lastEvent = {
-      type: '',
-      data: ''
-    };
-    /** @type {Array<Function>} Array of state change listeners */
-    this.stateChangeListeners = [];
-    /** @type {Array<Function>} Array of event listeners */
-    this.sharedEventListeners = [];
-  }
-
-  /**
-   * Change the state of the data channel
-   * @param {string} state - New state
-   * @private
-   */
-  return _createClass$1(SharedDataChannel, [{
-    key: "_changeState",
-    value: function _changeState(state) {
-      this.state = state;
-      var _iterator = _createForOfIteratorHelper(this.stateChangeListeners),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var listener = _step.value;
-          listener(state, this);
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-    }
-
-    /**
-     * Add a listener for state changes
-     * @param {Function} listener - Callback function for state changes
-     */
-  }, {
-    key: "addStateChangeListener",
-    value: function addStateChangeListener(listener) {
-      this.stateChangeListeners.push(listener);
-    }
-
-    /**
-     * Remove a state change listener
-     * @param {Function} listener - Callback function to remove
-     */
-  }, {
-    key: "removeStateChangeListener",
-    value: function removeStateChangeListener(listener) {
-      var index = this.stateChangeListeners.indexOf(listener);
-      if (index > -1) {
-        this.stateChangeListeners.splice(index, 1);
-      }
-    }
-
-    /**
-     * Add a listener for shared events
-     * @param {Function} listener - Callback function for shared events
-     */
-  }, {
-    key: "addSharedEventListener",
-    value: function addSharedEventListener(listener) {
-      this.sharedEventListeners.push(listener);
-    }
-
-    /**
-     * Open the data connection and set up event listeners
-     * @returns {Promise<void>} Promise that resolves when the connection is open
-     * @throws {Error} When failing to open the connection
-     * @private
-     */
-  }, {
-    key: "_openConnection",
-    value: function _openConnection() {
-      var _this = this;
-      return new Promise(function (resolve, reject) {
-        _this.connection.on('open', function () {
-          _this._changeState('open');
-          resolve();
-        });
-        _this.connection.on('error', function (err) {
-          _this._changeState('error');
-          reject(new Error(err));
-        });
-        _this.connection.on('data', function (data) {
-          if (data.type === 'var') {
-            _this.sharedVars.set(data.key, data.value);
-          } else if (data.type === 'event') {
-            _this.onSharedEvent(data.eventType, data.eventData);
-          }
-        });
-        _this.connection.on('close', function () {
-          _this._changeState('closed');
-        });
-      });
-    }
-
-    /**
-     * Open the data channel with an existing connection
-     * @param {DataConnection} connection - PeerJS DataConnection instance
-     * @returns {Promise<void>} Promise that resolves when the connection is open
-     * @throws {Error} When failing to open the connection
-     */
-  }, {
-    key: "openWithConnection",
-    value: function openWithConnection(connection) {
-      this.connection = connection;
-      this.remoteID = decodeFromPeerID(this.connection.peer);
-      return this._openConnection();
-    }
-
-    /**
-     * Connect to the remote peer
-     * @returns {Promise<void>} Promise that resolves when the connection is open
-     * @throws {Error} When failing to open the connection
-     */
-  }, {
-    key: "open",
-    value: function open() {
-      if (this.isOpen()) {
-        return Promise.resolve();
-      }
-      if (!this.remoteID) {
-        throw new Error('Remote ID not set');
-      }
-      this._changeState('opening');
-      var connection = this.peer.connect(encodeToPeerID(this.remoteID));
-      this.connection = connection;
-      return this._openConnection();
-    }
-
-    /**
-     * Close the data channel
-     */
-  }, {
-    key: "close",
-    value: function close() {
-      if (this.connection && this.connection.open) {
-        this.connection.close();
-      }
-    }
-
-    /**
-     * Check if the data channel is opening.
-     * @returns {boolean} True if the data channel is opening
-     */
-  }, {
-    key: "isOpening",
-    value: function isOpening() {
-      return this.state === 'opening';
-    }
-
-    /**
-     * Check if the data channel is open.
-     * @returns {boolean} True if the data channel is open
-     */
-  }, {
-    key: "isOpen",
-    value: function isOpen() {
-      return this.state === 'open';
-    }
-
-    /**
-     * Check if the data channel is closed after opened.
-     * @returns {boolean} True if the data channel is closed
-     */
-  }, {
-    key: "isClosed",
-    value: function isClosed() {
-      return this.state === 'closed';
-    }
-
-    /**
-     * Get the value of a shared variable
-     * @param {string} key - Variable name
-     * @returns {any} Variable value or empty string if not found
-     */
-  }, {
-    key: "sharedVar",
-    value: function sharedVar(key) {
-      return this.sharedVars.get(key);
-    }
-
-    /**
-     * Set a shared variable
-     * @param {string} key - Variable name
-     * @param {any} value - Variable value
-     * @returns {Promise<void>} Promise that resolves when the variable is set
-     */
-  }, {
-    key: "setSharedVar",
-    value: (function () {
-      var _setSharedVar = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee2(key, value) {
-        return _regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return this.connection.send({
-                type: 'var',
-                key: key,
-                value: value
-              });
-            case 2:
-              this.sharedVars.set(key, value);
-            case 3:
-            case "end":
-              return _context2.stop();
-          }
-        }, _callee2, this);
-      }));
-      function setSharedVar(_x, _x2) {
-        return _setSharedVar.apply(this, arguments);
-      }
-      return setSharedVar;
-    }()
-    /**
-     * Handle incoming shared events
-     * @param {string} type - Event type
-     * @param {any} data - Event data
-     */
-    )
-  }, {
-    key: "onSharedEvent",
-    value: function onSharedEvent(type, data) {
-      this._lastEvent = {
-        type: type,
-        data: data
-      };
-      var _iterator2 = _createForOfIteratorHelper(this.sharedEventListeners),
-        _step2;
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var listener = _step2.value;
-          listener(type, data);
-        }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
-    }
-
-    /**
-     * Dispatch a shared event
-     * @param {string} type - Event type
-     * @param {any} data - Event data
-     * @returns {Promise<void>} Promise that resolves when the event is dispatched
-     */
-  }, {
-    key: "dispatchSharedEvent",
-    value: (function () {
-      var _dispatchSharedEvent = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee3(type, data) {
-        return _regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.next = 2;
-              return this.connection.send({
-                type: 'event',
-                eventType: type,
-                eventData: data
-              });
-            case 2:
-              this.onSharedEvent(type, data);
-            case 3:
-            case "end":
-              return _context3.stop();
-          }
-        }, _callee3, this);
-      }));
-      function dispatchSharedEvent(_x3, _x4) {
-        return _dispatchSharedEvent.apply(this, arguments);
-      }
-      return dispatchSharedEvent;
-    }()
-    /**
-     * Get the type of the last shared event
-     * @returns {string} Event type
-     */
-    )
-  }, {
-    key: "lastSharedEventType",
-    value: function lastSharedEventType() {
-      return this._lastEvent.type;
-    }
-
-    /**
-     * Get the data of the last shared event
-     * @returns {any} Event data
-     */
-  }, {
-    key: "lastSharedEventData",
-    value: function lastSharedEventData() {
-      return this._lastEvent.data;
-    }
-  }]);
-}();
-/**
  * Class representing a mesh network of peer connections
  */
 var Mesh = /*#__PURE__*/function () {
@@ -1605,13 +1309,31 @@ var Mesh = /*#__PURE__*/function () {
     _classCallCheck$1(this, Mesh);
     /** @type {Peer|null} PeerJS instance */
     this.peer = null;
+    /** @type {string|null} PeerJS server host */
+    this.peerServer = null;
+    /** @type {string} ICE servers configuration */
+    this.iceServers = null;
     /** @type {string|null} Local peer ID */
     this.id = null;
-    /** @type {Map<string, SharedDataChannel>} Map of data channels */
-    this.channels = new Map();
+    /** @type {Map<string, DataConnection>} Map of peer connections */
+    this.connections = new Map();
     /** @type {Array<Function>} Event listener callback */
     this.eventListeners = [];
+    /** @type {Map<string, any>} Map of shared variables */
+    this.sharedVars = new Map();
+    /** @type {Array<{sender: string, time: number, type: string, data: any}>} Shared event buffer */
+    this.sharedEventBuffer = [];
+    /** @type {number} Length of the shared event buffer */
+    this.sharedEventBufferLength = 10;
+    /** @type {number} Index of the last shared event processed */
+    this.sharedEventIndex = 0;
   }
+
+  /**
+   * Add a listener for Mesh events
+   * @param {Function} listener - Callback function for events
+   * @returns {void}
+   */
   return _createClass$1(Mesh, [{
     key: "addMeshEventListener",
     value: function addMeshEventListener(listener) {
@@ -1619,25 +1341,41 @@ var Mesh = /*#__PURE__*/function () {
     }
 
     /**
-     * Get or create a data channel for a remote peer
-     * @param {string} remoteID - Remote peer ID of the data channel
-     * @returns {SharedDataChannel} Data channel instance
-     * @private
+     * Remove a listener for Mesh events
+     * @param {Function} listener - Callback function for events
+     * @returns {void}
      */
   }, {
-    key: "_getOrCreateChannel",
-    value: function _getOrCreateChannel(remoteID) {
-      var _this2 = this;
-      var channel = this.channels.get(remoteID);
-      if (channel) {
-        return channel;
+    key: "removeMeshEventListener",
+    value: function removeMeshEventListener(listener) {
+      var index = this.eventListeners.indexOf(listener);
+      if (index > -1) {
+        this.eventListeners.splice(index, 1);
       }
-      channel = new SharedDataChannel(this.peer, remoteID);
-      this.channels.set(remoteID, channel);
-      channel.addSharedEventListener(function () {
-        _this2.lastSharedEventChannelID = remoteID;
-      });
-      return channel;
+    }
+
+    /**
+     * Set PeerJS server host
+     * @param {string} server - PeerJS server host
+     */
+  }, {
+    key: "setPeerServer",
+    value: function setPeerServer(server) {
+      this.peerServer = server;
+    }
+
+    /**
+     * Set ICE servers configuration
+     * @param {string} servers - ICE servers configuration in JSON format
+     */
+  }, {
+    key: "setICEServers",
+    value: function setICEServers(servers) {
+      if (servers.charAt(0) !== '[') {
+        servers = "[".concat(servers, "]");
+      }
+      var serversData = JSON.parse(servers);
+      this.ICEServers = serversData;
     }
 
     /**
@@ -1649,7 +1387,7 @@ var Mesh = /*#__PURE__*/function () {
   }, {
     key: "openPeer",
     value: function openPeer(localID) {
-      var _this3 = this;
+      var _this = this;
       if (localID === '') {
         localID = "mesh-".concat(Math.random().toString(36).substring(2, 6));
       }
@@ -1660,24 +1398,61 @@ var Mesh = /*#__PURE__*/function () {
         this.closePeer();
       }
       return new Promise(function (resolve, reject) {
-        _this3.peer = new Peer(encodeToPeerID(localID));
-        _this3.peer.on('open', function (peerID) {
-          _this3.id = decodeFromPeerID(peerID);
-          _this3.peer.on('connection', function (dataConnection) {
-            var channel = _this3._getOrCreateChannel(decodeFromPeerID(dataConnection.peer));
-            channel.openWithConnection(dataConnection).then(function () {
-              _this3.eventListeners.forEach(function (listener) {
-                listener({
-                  type: 'dataChannelRequested',
-                  data: channel.remoteID
-                });
-              });
+        var options = {
+          config: {
+            iceServers: _this.iceServers ? _this.iceServers : []
+          }
+        };
+        if (_this.peerServer) {
+          var url = new URL(_this.peerServer);
+          options.host = url.hostname;
+          options.port = url.port || (url.protocol === 'https:' ? 443 : 80);
+          options.path = url.pathname;
+          if (options.path.endsWith('/')) {
+            options.path = options.path.slice(0, -1);
+          }
+          options.secure = url.protocol === 'https:';
+        }
+        _this.peer = new Peer(encodeToPeerID(localID), options);
+        _this.peer.on('open', function (peerID) {
+          _this.id = decodeFromPeerID(peerID);
+          _this.peer.on('connection', function (requested) {
+            var remoteID = decodeFromPeerID(requested.peer);
+            requested.on('open', function () {
+              var _onSyncAnswer = function onSyncAnswer(data) {
+                if (data.type === 'control' && data.command === 'syncAnswer') {
+                  data.vars.forEach(function (_ref2) {
+                    var _ref3 = _slicedToArray(_ref2, 2),
+                      key = _ref3[0],
+                      value = _ref3[1];
+                    _this.setSharedVar(key, value);
+                  });
+                  requested.off('data', _onSyncAnswer);
+                  _this._setupDataConnection(requested, remoteID);
+                  _this._registerDataConnection(requested, remoteID);
+                  _this.eventListeners.forEach(function (listener) {
+                    listener({
+                      type: 'dataConnectionRequested',
+                      data: remoteID
+                    });
+                  });
+                }
+              };
+              requested.on('data', _onSyncAnswer);
+              var syncRequest = {
+                sender: _this.id,
+                time: Date.now(),
+                type: 'control',
+                command: 'syncRequest',
+                vars: Array.from(_this.sharedVars)
+              };
+              requested.send(syncRequest);
             });
           });
-          resolve(_this3.peer);
+          resolve(_this.peer);
         });
-        _this3.peer.on('error', function (err) {
-          _this3.closePeer();
+        _this.peer.on('error', function (err) {
+          _this.closePeer();
           reject(err);
         });
       });
@@ -1690,19 +1465,19 @@ var Mesh = /*#__PURE__*/function () {
     key: "closePeer",
     value: function closePeer() {
       // Close all data channels first
-      var _iterator3 = _createForOfIteratorHelper(this.channels.values()),
-        _step3;
+      var _iterator = _createForOfIteratorHelper(this.connections.values()),
+        _step;
       try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var channel = _step3.value;
-          channel.close();
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var connection = _step.value;
+          connection.close();
         }
       } catch (err) {
-        _iterator3.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator3.f();
+        _iterator.f();
       }
-      this.channels.clear();
+      this.connections.clear();
 
       // Destroy the peer connection
       if (this.peer) {
@@ -1723,81 +1498,307 @@ var Mesh = /*#__PURE__*/function () {
     }
 
     /**
+     * Setup a data connection
+     * @param {DataConnection} connection - PeerJS DataConnection instance
+     * @param {string} remoteID - Remote Mesh ID
+     */
+  }, {
+    key: "_setupDataConnection",
+    value: function _setupDataConnection(connection, remoteID) {
+      var _this2 = this;
+      connection.on('data', function (data) {
+        if (data.type === 'var') {
+          if (_this2.sharedVars.get(data.key) !== data.value) {
+            _this2.connections.forEach(function (conn) {
+              if (conn !== connection) {
+                conn.send(data);
+              }
+            });
+            _this2.sharedVars.set(data.key, data.value);
+          }
+        } else if (data.type === 'event') {
+          if (data.sender === _this2.id) return;
+          var received = _this2.sharedEventBuffer.length > 0 && _this2.sharedEventBuffer.every(function (event) {
+            return event.sender === data.sender && event.time === data.time && event.type === data.type && event.eventType === data.eventType && event.eventData === data.eventData;
+          });
+          if (!received) {
+            _this2.connections.forEach(function (conn) {
+              if (conn !== connection) {
+                conn.send(data);
+              }
+            });
+            _this2.onSharedEvent(data);
+          }
+        }
+      });
+      connection.on('close', function () {
+        _this2.eventListeners.forEach(function (listener) {
+          listener({
+            type: 'dataConnectionClosed',
+            data: remoteID
+          });
+        });
+      });
+      connection.on('error', function (err) {
+        _this2.eventListeners.forEach(function (listener) {
+          listener({
+            type: 'dataConnectionError',
+            data: remoteID,
+            error: err
+          });
+        });
+      });
+    }
+
+    /**
+     * Register a data connection
+     * @param {DataConnection} connection - PeerJS DataConnection instance
+     * @param {string} remoteID - Remote Mesh ID
+     * @private
+     */
+  }, {
+    key: "_registerDataConnection",
+    value: function _registerDataConnection(connection, remoteID) {
+      this.connections.set(remoteID, connection);
+    }
+
+    /**
      * Connect to a remote peer
      * @param {string} remoteID - Remote Mesh ID
      * @returns {Promise<SharedDataChannel>} Promise that resolves with the data channel
      */
   }, {
-    key: "connectDataChannel",
-    value: function connectDataChannel(remoteID) {
-      var _this4 = this;
+    key: "openDataConnection",
+    value: function openDataConnection(remoteID) {
+      var _this3 = this;
       if (!this.peer) throw new Error('Peer not initialized');
       if (!remoteID || remoteID === '') {
         return Promise.reject(new Error('Remote ID not set'));
       }
-      var channel = this._getOrCreateChannel(remoteID);
-      if (channel.isOpen()) {
-        return Promise.resolve(channel);
+      var conn = this.connections.get(remoteID);
+      if (conn && conn.open) {
+        return Promise.resolve(conn);
       }
-      return channel.open().then(function () {
-        _this4.eventListeners.forEach(function (listener) {
-          listener({
-            type: 'dataChannelConnected',
-            data: channel.remoteID
-          });
+      var newConnection = this.peer.connect(encodeToPeerID(remoteID));
+      return new Promise(function (resolve, reject) {
+        newConnection.on('open', function () {
+          var _onSyncRequest = function onSyncRequest(data) {
+            if (data.type === 'control' && data.command === 'syncRequest') {
+              data.vars.forEach(function (_ref4) {
+                var _ref5 = _slicedToArray(_ref4, 2),
+                  key = _ref5[0],
+                  value = _ref5[1];
+                _this3.setSharedVar(key, value);
+              });
+              var syncAnswer = {
+                sender: _this3.id,
+                time: Date.now(),
+                type: 'control',
+                command: 'syncAnswer',
+                vars: Array.from(_this3.sharedVars)
+              };
+              newConnection.send(syncAnswer);
+              newConnection.off('data', _onSyncRequest);
+              _this3._setupDataConnection(newConnection, remoteID);
+              _this3._registerDataConnection(newConnection, remoteID);
+              _this3.eventListeners.forEach(function (listener) {
+                listener({
+                  type: 'dataConnectionOpened',
+                  data: remoteID
+                });
+              });
+              resolve(newConnection);
+            }
+          };
+          newConnection.on('data', _onSyncRequest);
         });
-        return channel;
-      }).catch(function (err) {
-        _this4.channels.delete(remoteID);
-        throw err;
+        newConnection.on('error', function (err) {
+          reject(err);
+        });
       });
     }
 
     /**
-     * Get an existing data channel
+     * Get an existing data connection
      * @param {string} remoteID - Remote Mesh ID
-     * @returns {SharedDataChannel|undefined} Data channel if it exists
+     * @returns {DataConnection|undefined} Data connection if it exists
      */
   }, {
-    key: "getDataChannel",
-    value: function getDataChannel(remoteID) {
-      return this.channels.get(remoteID);
+    key: "getDataConnection",
+    value: function getDataConnection(remoteID) {
+      return this.connections.get(remoteID);
     }
 
     /**
-     * Disconnect and remove a data channel
+     * Check if a data connection is open
+     * @param {string} remoteID - Remote Mesh ID
+     * @returns {boolean} True if the data channel is open
+     */
+  }, {
+    key: "isDataConnectionOpen",
+    value: function isDataConnectionOpen(remoteID) {
+      var connection = this.connections.get(remoteID);
+      return !!connection && connection.open;
+    }
+
+    /**
+     * Disconnect and remove a data connection
      * @param {string} remoteID - Remote peer ID
      */
   }, {
-    key: "disconnectDataChannel",
-    value: function disconnectDataChannel(remoteID) {
-      var channel = this.channels.get(remoteID);
-      if (channel) {
-        if (!channel.isClosed()) {
-          channel.close();
+    key: "closeDataConnection",
+    value: function closeDataConnection(remoteID) {
+      var conn = this.connections.get(remoteID);
+      if (conn) {
+        if (conn.open) {
+          conn.close();
         }
       }
     }
 
     /**
-     * Get the ID of the data channel at a given index
-     * @param {number} index - Channel index
-     * @returns {string} Data channel Mesh ID
+     * Get the ID of the data connection at a given index
+     * @param {number} index - Connection index
+     * @returns {string} Data connection Mesh ID
      */
   }, {
-    key: "dataChannelIDAt",
-    value: function dataChannelIDAt(index) {
-      return Array.from(this.channels.keys())[index];
+    key: "dataConnectionIDAt",
+    value: function dataConnectionIDAt(index) {
+      return Array.from(this.connections.keys())[index];
     }
 
     /**
-     * Get the number of data channels
-     * @returns {number} Number of data channels
+     * Get the number of data connections
+     * @returns {number} Number of data connections
      */
   }, {
-    key: "dataChannelCount",
-    value: function dataChannelCount() {
-      return this.channels.size;
+    key: "dataConnectionCount",
+    value: function dataConnectionCount() {
+      return this.connections.size;
+    }
+  }, {
+    key: "sendSyncRequest",
+    value: function sendSyncRequest() {
+      var data = {
+        sender: this.id,
+        time: Date.now(),
+        type: 'control',
+        command: 'syncRequest',
+        vars: Object.fromEntries(this.sharedVars)
+      };
+      var _iterator2 = _createForOfIteratorHelper(this.connections.values()),
+        _step2;
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var connection = _step2.value;
+          connection.send(data);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    }
+
+    /**
+     * Get shared variable
+     * @param {string} key - Variable name
+     * @returns {any} Variable value
+     */
+  }, {
+    key: "sharedVar",
+    value: function sharedVar(key) {
+      return this.sharedVars.get(key);
+    }
+
+    /**
+     * Set shared variable
+     * @param {string} key - Variable name
+     * @param {any} value - Variable value
+     */
+  }, {
+    key: "setSharedVar",
+    value: function setSharedVar(key, value) {
+      var data = {
+        sender: this.id,
+        time: Date.now(),
+        type: 'var',
+        key: key,
+        value: value
+      };
+      var _iterator3 = _createForOfIteratorHelper(this.connections.values()),
+        _step3;
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var connection = _step3.value;
+          connection.send(data);
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+      this.sharedVars.set(key, value);
+    }
+
+    /**
+     * Get first shared event of the buffer
+     * @returns {object|undefined} Shared event object
+     */
+  }, {
+    key: "nextSharedEvent",
+    value: function nextSharedEvent() {
+      if (this.sharedEventBuffer.length <= this.sharedEventIndex) return;
+      var event = this.sharedEventBuffer[this.sharedEventIndex];
+      this.sharedEventIndex++;
+      return event;
+    }
+
+    /**
+     * Handle incoming shared events
+     * @param {object} event - Shared event object
+     */
+  }, {
+    key: "onSharedEvent",
+    value: function onSharedEvent(event) {
+      this.sharedEventBuffer.push(event);
+      if (this.sharedEventBuffer.length > this.sharedEventBufferLength) {
+        this.sharedEventBuffer.shift();
+        this.sharedEventIndex--;
+        if (this.sharedEventIndex < 0) {
+          this.sharedEventIndex = 0;
+        }
+      }
+    }
+
+    /**
+     * Dispatch a shared event
+     * @param {string} type - Event type
+     * @param {any} data - Event data
+     */
+  }, {
+    key: "dispatchSharedEvent",
+    value: function dispatchSharedEvent(type, data) {
+      var event = {
+        sender: this.id,
+        time: Date.now(),
+        type: 'event',
+        eventType: type,
+        eventData: data
+      };
+      var _iterator4 = _createForOfIteratorHelper(this.connections.values()),
+        _step4;
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var connection = _step4.value;
+          connection.send(event);
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+      this.onSharedEvent(event);
     }
   }]);
 }();
@@ -1856,6 +1857,14 @@ var MeshBlocks = /*#__PURE__*/function () {
      */
     this.mesh = new Mesh();
     this.mesh.addMeshEventListener(this.onMeshEvent.bind(this));
+
+    /** @type {object} the current processing event */
+    this.processingSharedEvent = null;
+    /** @type {number} the interval for polling the shared event */
+    this.sharedEventPollingInterval = 10;
+    /** @type {number} the interval for checking the completion of the shared event */
+    this.eventCompletionCheckInterval = 10;
+    this.startSharedEventProcessing();
   }
 
   /**
@@ -1865,11 +1874,8 @@ var MeshBlocks = /*#__PURE__*/function () {
   return _createClass$1(MeshBlocks, [{
     key: "onMeshEvent",
     value: function onMeshEvent(event) {
-      if (event.type === 'dataChannelConnected') {
-        var channel = this.mesh.getDataChannel(event.data);
-        channel.addSharedEventListener(this.onSharedEvent.bind(this));
-      } else if (event.type === 'dataChannelRequested') {
-        this.runtime.startHats('xcxMesh_whenDataChannelRequested');
+      if (event.type === 'dataConnectionRequested') {
+        this.runtime.startHats('xcxMesh_whenDataConnectionRequested');
       }
     }
 
@@ -1956,145 +1962,130 @@ var MeshBlocks = /*#__PURE__*/function () {
     }
 
     /**
-     * Connect data channel to a remote peer.
+     * Set ICE servers.
+     * @param {object} args - arguments for the block.
+     * @param {string} args.SERVERS - the ICE servers.
+     * @return {string} - the result of setting the ICE servers.
+     */
+  }, {
+    key: "setICEServers",
+    value: function setICEServers(args) {
+      var servers = String(args.SERVERS).trim();
+      try {
+        this.mesh.setICEServers(servers);
+        return "ICE servers set to \"".concat(servers, "\"");
+      } catch (e) {
+        return "Failed to set ICE servers: ".concat(e);
+      }
+    }
+
+    /**
+     * Set PeerJS server.
+     * @param {object} args - arguments for the block.
+     * @param {string} args.SERVER - the server URL.
+     * @returns {string} - result message
+     */
+  }, {
+    key: "setPeerServer",
+    value: function setPeerServer(args) {
+      var server = String(args.SERVER).trim();
+      try {
+        this.mesh.setPeerServer(server);
+        return "PeerJS server set to \"".concat(server, "\"");
+      } catch (e) {
+        return "Failed to set PeerJS server: ".concat(e);
+      }
+    }
+
+    /**
+     * Open data connection with a remote peer.
      * @param {object} args - the block's arguments.
-     * @param {object} util - utility object provided by the runtime.
      * @param {string} args.ID - the remote ID.
      * @returns {string} - the result of connecting to the peer.
      */
   }, {
-    key: "connectDataChannel",
+    key: "openDataConnection",
     value: (function () {
-      var _connectDataChannel = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee2(args, util) {
-        var remoteID, channel;
+      var _openDataConnection = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee2(args) {
+        var remoteID;
         return _regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               remoteID = String(args.ID).trim();
-              channel = this.mesh.getDataChannel(remoteID);
-              if (!channel) {
-                _context2.next = 9;
-                break;
-              }
-              if (!channel.isOpen()) {
-                _context2.next = 5;
-                break;
-              }
-              return _context2.abrupt("return", "Already connected to peer \"".concat(remoteID, "\""));
-            case 5:
-              if (!channel.isOpening()) {
-                _context2.next = 8;
-                break;
-              }
-              util.yield();
-              return _context2.abrupt("return");
-            case 8:
-              channel.close();
-            case 9:
-              _context2.prev = 9;
-              _context2.next = 12;
-              return this.mesh.connectDataChannel(remoteID);
-            case 12:
+              _context2.prev = 1;
+              _context2.next = 4;
+              return this.mesh.openDataConnection(remoteID);
+            case 4:
               return _context2.abrupt("return", "Connected to peer ".concat(remoteID));
-            case 15:
-              _context2.prev = 15;
-              _context2.t0 = _context2["catch"](9);
+            case 7:
+              _context2.prev = 7;
+              _context2.t0 = _context2["catch"](1);
               return _context2.abrupt("return", "Failed to connect to peer ".concat(remoteID, ": ").concat(_context2.t0));
-            case 18:
+            case 10:
             case "end":
               return _context2.stop();
           }
-        }, _callee2, this, [[9, 15]]);
+        }, _callee2, this, [[1, 7]]);
       }));
-      function connectDataChannel(_x3, _x4) {
-        return _connectDataChannel.apply(this, arguments);
+      function openDataConnection(_x3) {
+        return _openDataConnection.apply(this, arguments);
       }
-      return connectDataChannel;
+      return openDataConnection;
     }()
     /**
-     * Check if the data channel is open.
+     * Check if the data connection is open.
      * @param {object} args - the block's arguments.
      * @param {string} args.ID - the remote ID.
      * @returns {boolean} - true if the data channel is open.
      */
     )
   }, {
-    key: "isDataChannelConnected",
-    value: function isDataChannelConnected(args) {
+    key: "isDataConnectionOpen",
+    value: function isDataConnectionOpen(args) {
       var remoteID = String(args.ID).trim();
-      var channel = this.mesh.getDataChannel(remoteID);
-      if (!channel) return false;
-      return channel.isOpen();
+      return this.mesh.isDataConnectionOpen(remoteID);
     }
 
     /**
-     * When the data channel is opened.
-     * @param {object} args - the block's arguments.
-     * @param {object} util - utility object provided by the runtime.
-     * @returns {boolean} - true if the data channel is opened.
-     */
-  }, {
-    key: "whenDataChannelConnected",
-    value: function whenDataChannelConnected(args, util) {
-      return this.isDataChannelConnected(args, util);
-    }
-
-    /**
-     * When the data channel is closed.
-     * @param {object} args - the block's arguments.
-     * @param {string} args.ID - the remote ID.
-     * @param {object} util - utility object provided by the runtime.
-     * @returns {boolean} - true if the data channel is closed.
-     */
-  }, {
-    key: "whenDataChannelDisconnected",
-    value: function whenDataChannelDisconnected(args) {
-      var remoteID = String(args.ID).trim();
-      var channel = this.mesh.getDataChannel(remoteID);
-      if (!channel) return false;
-      return !channel.isOpen();
-    }
-
-    /**
-     * Disconnect the peer.
+     * Close the data connection of the remote peer.
      * @param {object} args - the block's arguments.
      * @param {string} args.ID - the remote ID.
      * @returns {Promise<void>} - a promise which resolves after disconnecting the peer.
      */
   }, {
-    key: "disconnectDataChannel",
+    key: "closeDataConnection",
     value: (function () {
-      var _disconnectDataChannel = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee3(args) {
+      var _closeDataConnection = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee3(args) {
         var remoteID;
         return _regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
               remoteID = String(args.ID).trim();
               _context3.next = 3;
-              return this.mesh.disconnectDataChannel(remoteID);
+              return this.mesh.closeDataConnection(remoteID);
             case 3:
             case "end":
               return _context3.stop();
           }
         }, _callee3, this);
       }));
-      function disconnectDataChannel(_x5) {
-        return _disconnectDataChannel.apply(this, arguments);
+      function closeDataConnection(_x4) {
+        return _closeDataConnection.apply(this, arguments);
       }
-      return disconnectDataChannel;
+      return closeDataConnection;
     }()
     /**
-     * Return the data channel ID at the index.
+     * Return the data connection ID at the index.
      * @param {object} args - arguments for the block.
-     * @param {number} args.CHANNEL_INDEX - the index of the data channel.
-     * @return {string} - the data channel ID.
+     * @param {number} args.CONNECTION_INDEX - the index of the data connection.
+     * @return {string} - the data connection ID.
      */
     )
   }, {
-    key: "dataChannelIDAt",
-    value: function dataChannelIDAt(args) {
-      var index = Cast$1.toNumber(args.CHANNEL_INDEX) - 1;
-      var remoteID = this.mesh.dataChannelIDAt(index);
+    key: "dataConnectionIDAt",
+    value: function dataConnectionIDAt(args) {
+      var index = Cast$1.toNumber(args.CONNECTION_INDEX) - 1;
+      var remoteID = this.mesh.dataConnectionIDAt(index);
       return remoteID ? remoteID : '';
     }
 
@@ -2103,26 +2094,22 @@ var MeshBlocks = /*#__PURE__*/function () {
      * @returns {number} - the number of data channels.
      */
   }, {
-    key: "dataChannelCount",
-    value: function dataChannelCount() {
-      return this.mesh.dataChannelCount();
+    key: "dataConnectionCount",
+    value: function dataConnectionCount() {
+      return this.mesh.dataConnectionCount();
     }
 
     /**
      * Return the value of the key.
      * @param {object} args - arguments for the block.
-     * @param {string} args.ID - the remote ID.
      * @param {string} args.KEY - the key.
      * @return {string} - the value of the key.
      */
   }, {
     key: "sharedVar",
     value: function sharedVar(args) {
-      var remoteID = String(args.ID).trim();
-      var channel = this.mesh.getDataChannel(remoteID);
-      if (!channel) return '';
       var key = String(args.KEY).trim();
-      return channel.sharedVar(key) || '';
+      return this.mesh.sharedVar(key) || '';
     }
 
     /**
@@ -2136,56 +2123,36 @@ var MeshBlocks = /*#__PURE__*/function () {
   }, {
     key: "setSharedVar",
     value: function setSharedVar(args) {
-      var remoteID = String(args.ID).trim();
-      var channel = this.mesh.getDataChannel(remoteID);
-      if (!channel) return 'data channel is not connected';
       var key = String(args.KEY).trim();
       var value = Cast$1.toString(args.VALUE);
-      channel.setSharedVar(key, value).catch(function (e) {
-        return "Failed to set \"".concat(key, "\" to \"").concat(value, "\" in ").concat(remoteID, ": ").concat(e);
-      });
-      // Do not wait for the promise to resolve for performance reasons.
-    }
-
-    /**
-     * Return the remote ID of the peer which sent the last event.
-     * @returns {string?} - the remote ID of the peer.
-     */
-  }, {
-    key: "lastSharedEventChannelID",
-    value: function lastSharedEventChannelID() {
-      var channelID = this.mesh.lastSharedEventChannelID;
-      return channelID ? channelID : '';
+      try {
+        this.mesh.setSharedVar(key, value);
+      } catch (e) {
+        return "Failed to set \"".concat(key, "\" to \"").concat(value, "\": ").concat(e);
+      }
+      return "Set \"".concat(key, "\" to \"").concat(value, "\"");
     }
 
     /**
      * Return the last event type.
-     * @param {object} args - arguments for the block.
-     * @param {string} args.ID - the remote ID.
      * @return {string} - the last event type.
      */
   }, {
     key: "lastSharedEventType",
-    value: function lastSharedEventType(args) {
-      var remoteID = String(args.ID).trim();
-      var channel = this.mesh.getDataChannel(remoteID);
-      if (!channel) return '';
-      return channel.lastSharedEventType() || '';
+    value: function lastSharedEventType() {
+      var event = this.processingSharedEvent;
+      return event && event.eventType || '';
     }
 
     /**
      * Return the last event data.
-     * @param {object} args - arguments for the block.
-     * @param {string} args.ID - the remote ID.
      * @return {string} - the last event data.
      */
   }, {
     key: "lastSharedEventData",
-    value: function lastSharedEventData(args) {
-      var remoteID = String(args.ID).trim();
-      var channel = this.mesh.getDataChannel(remoteID);
-      if (!channel) return '';
-      return channel.lastSharedEventData() || '';
+    value: function lastSharedEventData() {
+      var event = this.processingSharedEvent;
+      return event && event.eventData || '';
     }
 
     /**
@@ -2193,20 +2160,18 @@ var MeshBlocks = /*#__PURE__*/function () {
      * @param {object} args - arguments for the block.
      * @param {string} args.TYPE - the event type.
      * @param {string} args.DATA - the event data.
-     * @param {string} args.ID - the remote ID.
      * @return {Promise<string>} - resolve with the result of sending the event.
      */
   }, {
     key: "dispatchSharedEvent",
     value: function dispatchSharedEvent(args) {
-      var remoteID = String(args.ID).trim();
-      var channel = this.mesh.getDataChannel(remoteID);
-      if (!channel) return Promise.resolve("data channel for ".concat(remoteID, " is not connected"));
       var type = String(args.TYPE).trim();
       var data = Cast$1.toString(args.DATA);
-      return channel.dispatchSharedEvent(type, data).catch(function (e) {
-        return "Failed to dispatch event \"".concat(type, "\" to ").concat(remoteID, ": ").concat(e);
-      });
+      try {
+        this.mesh.dispatchSharedEvent(type, data);
+      } catch (e) {
+        return "Failed to dispatch event \"".concat(type, "\": ").concat(e);
+      }
     }
 
     /**
@@ -2216,6 +2181,61 @@ var MeshBlocks = /*#__PURE__*/function () {
     key: "onSharedEvent",
     value: function onSharedEvent() {
       this.runtime.startHats('xcxMesh_whenSharedEventReceived');
+    }
+
+    /**
+     * Start the shared event processing.
+     * This is called when the project is started.
+     * This gets a next event from the mesh and process it then repeat.
+     * This is called only once.
+     */
+  }, {
+    key: "startSharedEventProcessing",
+    value: function startSharedEventProcessing() {
+      var _this = this;
+      var blocks = this;
+      var _nextEvent = function nextEvent() {
+        var event = blocks.mesh.nextSharedEvent();
+        if (event) {
+          _this.processingSharedEvent = event;
+          blocks.processSharedEvent(event, _nextEvent);
+        } else {
+          setTimeout(_nextEvent, _this.sharedEventPollingInterval);
+        }
+      };
+      setTimeout(_nextEvent, 0);
+    }
+
+    /**
+     * Process the shared event with the callback.
+     * The callback will be called after the all started threads are finished.
+     * @param {object} event - the shared event.
+     * @param {Function} onCompletion - the callback function.
+     */
+  }, {
+    key: "processSharedEvent",
+    value: function processSharedEvent(event, onCompletion) {
+      var _this2 = this;
+      // Have we run before, starting threads?
+      if (!event.startedThreads) {
+        // No - start hats for this broadcast.
+        event.startedThreads = this.runtime.startHats('xcxMesh_whenSharedEventReceived');
+        if (event.startedThreads.length === 0) {
+          // Nothing was started.
+          return;
+        }
+      }
+      // We've run before; check if the wait is still going on.
+      var waiting = event.startedThreads.some(function (thread) {
+        return _this2.runtime.threads.indexOf(thread) !== -1;
+      });
+      if (waiting) {
+        setTimeout(function () {
+          _this2.processSharedEvent(event, onCompletion);
+        }, this.eventCompletionCheckInterval);
+      } else {
+        onCompletion();
+      }
     }
 
     /**
@@ -2269,117 +2289,109 @@ var MeshBlocks = /*#__PURE__*/function () {
             id: 'xcxMesh.closePeer',
             default: 'close peer'
           })
-        }, '---', {
-          opcode: 'connectDataChannel',
+        }, {
+          opcode: 'setPeerServer',
           blockType: BlockType$1.COMMAND,
           text: formatMessage({
-            id: 'xcxMesh.connectDataChannel',
-            default: 'connect data channel with [ID]'
+            id: 'xcxMesh.setPeerServer',
+            default: 'set peer server to [SERVER]'
           }),
           arguments: {
-            ID: {
+            SERVER: {
               type: ArgumentType$1.STRING,
-              defaultValue: formatMessage({
-                id: 'xcxMesh.connectDataChannel.defaultID',
-                default: 'remoteID'
-              })
+              defaultValue: 'https://0.peerjs.com'
             }
           }
         }, {
-          opcode: 'whenDataChannelConnected',
-          blockType: BlockType$1.HAT,
-          isEdgeActivated: true,
+          opcode: 'setICEServers',
+          blockType: BlockType$1.COMMAND,
           text: formatMessage({
-            id: 'xcxMesh.whenDataChannelConnected',
-            default: 'when data channel for [ID] connected'
+            id: 'xcxMesh.setICEServers',
+            default: 'set ICE servers to [SERVERS]'
           }),
           arguments: {
-            ID: {
+            SERVERS: {
               type: ArgumentType$1.STRING,
-              defaultValue: formatMessage({
-                id: 'xcxMesh.whenDataChannelConnected.defaultID',
-                default: 'remoteID'
-              })
+              defaultValue: ' '
             }
           }
-        }, {
-          opcode: 'whenDataChannelDisconnected',
-          blockType: BlockType$1.HAT,
-          isEdgeActivated: true,
+        }, '---', {
+          opcode: 'openDataConnection',
+          blockType: BlockType$1.COMMAND,
           text: formatMessage({
-            id: 'xcxMesh.whenDataChannelDisconnected',
-            default: 'when data channel for [ID] disconnected'
+            id: 'xcxMesh.openDataConnection',
+            default: 'open connection to [ID]'
           }),
           arguments: {
             ID: {
               type: ArgumentType$1.STRING,
               defaultValue: formatMessage({
-                id: 'xcxMesh.whenDataChannelDisconnected.defaultID',
+                id: 'xcxMesh.openDataConnection.defaultID',
                 default: 'remoteID'
               })
             }
           }
         }, {
-          opcode: 'isDataChannelConnected',
+          opcode: 'isDataConnectionOpen',
           blockType: BlockType$1.BOOLEAN,
           text: formatMessage({
-            id: 'xcxMesh.isDataChannelConnected',
-            default: 'data channel for [ID] is connected'
+            id: 'xcxMesh.isDataConnectionOpen',
+            default: 'connection to [ID] is open'
           }),
           arguments: {
             ID: {
               type: ArgumentType$1.STRING,
               defaultValue: formatMessage({
-                id: 'xcxMesh.isDataChannelConnected.defaultID',
+                id: 'xcxMesh.isDataConnectionOpen.defaultID',
                 default: 'remoteID'
               })
             }
           }
         }, {
-          opcode: 'disconnectDataChannel',
+          opcode: 'closeDataConnection',
           blockType: BlockType$1.COMMAND,
           text: formatMessage({
-            id: 'xcxMesh.disconnectDataChannel',
-            default: 'disconnect data channel for [ID]'
+            id: 'xcxMesh.closeDataConnection',
+            default: 'close connection to [ID]'
           }),
           arguments: {
             ID: {
               type: ArgumentType$1.STRING,
               defaultValue: formatMessage({
-                id: 'xcxMesh.disconnectDataChannel.defaultID',
+                id: 'xcxMesh.closeDataConnection.defaultID',
                 default: 'remoteID'
               })
             }
           }
         }, {
-          opcode: 'whenDataChannelRequested',
+          opcode: 'whenDataConnectionRequested',
           blockType: BlockType$1.EVENT,
           isEdgeActivated: false,
           text: formatMessage({
-            id: 'xcxMesh.whenDataChannelRequested',
-            default: 'when data channel requested'
+            id: 'xcxMesh.whenDataConnectionRequested',
+            default: 'when connection requested'
           })
         }, {
-          opcode: 'dataChannelIDAt',
+          opcode: 'dataConnectionIDAt',
           blockType: BlockType$1.REPORTER,
           disableMonitor: true,
           text: formatMessage({
-            id: 'xcxMesh.dataChannelIDAt',
-            default: 'data channel ID at [CHANNEL_INDEX]'
+            id: 'xcxMesh.dataConnectionIDAt',
+            default: 'connection ID at [CONNECTION_INDEX]'
           }),
           arguments: {
-            CHANNEL_INDEX: {
+            CONNECTION_INDEX: {
               type: ArgumentType$1.NUMBER,
               defaultValue: 1
             }
           }
         }, {
-          opcode: 'dataChannelCount',
+          opcode: 'dataConnectionCount',
           blockType: BlockType$1.REPORTER,
           disableMonitor: true,
           text: formatMessage({
-            id: 'xcxMesh.dataChannelCount',
-            default: 'data channel count'
+            id: 'xcxMesh.dataConnectionCount',
+            default: 'connection count'
           })
         }, '---', {
           opcode: 'setSharedVar',
@@ -2387,7 +2399,7 @@ var MeshBlocks = /*#__PURE__*/function () {
           blockAllThreads: false,
           text: formatMessage({
             id: 'xcxMesh.setSharedVar',
-            default: 'set value of [KEY] to [VALUE] in channel with [ID]'
+            default: 'set value of [KEY] to [VALUE]'
           }),
           arguments: {
             KEY: {
@@ -2403,13 +2415,6 @@ var MeshBlocks = /*#__PURE__*/function () {
                 id: 'xcxMesh.setSharedVar.defaultValue',
                 default: 'value'
               })
-            },
-            ID: {
-              type: ArgumentType$1.STRING,
-              defaultValue: formatMessage({
-                id: 'xcxMesh.setSharedVar.defaultID',
-                default: 'remoteID'
-              })
             }
           }
         }, {
@@ -2418,7 +2423,7 @@ var MeshBlocks = /*#__PURE__*/function () {
           blockAllThreads: false,
           text: formatMessage({
             id: 'xcxMesh.sharedVar',
-            default: 'value of [KEY] in channel with [ID]'
+            default: 'value of [KEY]'
           }),
           arguments: {
             KEY: {
@@ -2427,13 +2432,6 @@ var MeshBlocks = /*#__PURE__*/function () {
                 id: 'xcxMesh.sharedVar.defaultKey',
                 default: 'key'
               })
-            },
-            ID: {
-              type: ArgumentType$1.STRING,
-              defaultValue: formatMessage({
-                id: 'xcxMesh.sharedVar.defaultID',
-                default: 'remoteID'
-              })
             }
           }
         }, '---', {
@@ -2441,7 +2439,7 @@ var MeshBlocks = /*#__PURE__*/function () {
           blockType: BlockType$1.COMMAND,
           text: formatMessage({
             id: 'xcxMesh.dispatchSharedEvent',
-            default: 'dispatch event [TYPE] with [DATA] in channel [ID]'
+            default: 'dispatch event [TYPE] with [DATA]'
           }),
           arguments: {
             TYPE: {
@@ -2457,13 +2455,6 @@ var MeshBlocks = /*#__PURE__*/function () {
                 id: 'xcxMesh.dispatchSharedEvent.defaultData',
                 default: 'data'
               })
-            },
-            ID: {
-              type: ArgumentType$1.STRING,
-              defaultValue: formatMessage({
-                id: 'xcxMesh.dispatchSharedEvent.defaultID',
-                default: 'remoteID'
-              })
             }
           }
         }, {
@@ -2476,47 +2467,23 @@ var MeshBlocks = /*#__PURE__*/function () {
             default: 'when event received'
           })
         }, {
-          opcode: 'lastSharedEventChannelID',
-          blockType: BlockType$1.REPORTER,
-          disableMonitor: true,
-          text: formatMessage({
-            id: 'xcxMesh.lastSharedEventChannelID',
-            default: 'channel ID of the last event'
-          })
-        }, {
           opcode: 'lastSharedEventType',
           blockType: BlockType$1.REPORTER,
           disableMonitor: true,
           text: formatMessage({
             id: 'xcxMesh.lastSharedEventType',
-            default: 'event in channel [ID]'
+            default: 'event type'
           }),
-          arguments: {
-            ID: {
-              type: ArgumentType$1.STRING,
-              defaultValue: formatMessage({
-                id: 'xcxMesh.lastSharedEventType.defaultID',
-                default: 'remoteID'
-              })
-            }
-          }
+          arguments: {}
         }, {
           opcode: 'lastSharedEventData',
           blockType: BlockType$1.REPORTER,
           disableMonitor: true,
           text: formatMessage({
             id: 'xcxMesh.lastSharedEventData',
-            default: 'data of event in channel [ID]'
+            default: 'event data'
           }),
-          arguments: {
-            ID: {
-              type: ArgumentType$1.STRING,
-              defaultValue: formatMessage({
-                id: 'xcxMesh.lastSharedEventData.defaultID',
-                default: 'remoteID'
-              })
-            }
-          }
+          arguments: {}
         }],
         menus: {}
       };
