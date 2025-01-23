@@ -1132,6 +1132,7 @@ var en = {
 	"xcxMesh.setSharedVar.defaultValue": "value",
 	"xcxMesh.sharedVar": "value of [KEY]",
 	"xcxMesh.sharedVar.defaultKey": "key",
+	"xcxMesh.sharedVarKeys": "all shared variable keys",
 	"xcxMesh.dispatchSharedEvent": "dispatch event [TYPE] with [DATA]",
 	"xcxMesh.dispatchSharedEvent.defaultEvent": "event",
 	"xcxMesh.dispatchSharedEvent.defaultData": "data",
@@ -1162,6 +1163,7 @@ var ja = {
 	"xcxMesh.setSharedVar.defaultValue": "value",
 	"xcxMesh.sharedVar": "[KEY] の値",
 	"xcxMesh.sharedVar.defaultKey": "key",
+	"xcxMesh.sharedVarKeys": "すべての共有変数のキー",
 	"xcxMesh.dispatchSharedEvent": "[TYPE] イベントを [DATA] と共に送る",
 	"xcxMesh.dispatchSharedEvent.defaultEvent": "event",
 	"xcxMesh.dispatchSharedEvent.defaultData": "data",
@@ -1192,6 +1194,7 @@ var translations = {
 	"xcxMesh.dataConnectionCount": "せつぞくのかず",
 	"xcxMesh.setSharedVar": "[KEY] を [VALUE] に する",
 	"xcxMesh.setSharedVar.defaultKey": "key",
+	"xcxMesh.sharedVarKeys": "すべての きょうゆう へんすう の キー",
 	"xcxMesh.setSharedVar.defaultValue": "value",
 	"xcxMesh.sharedVar": "[KEY] の あたい",
 	"xcxMesh.sharedVar.defaultKey": "key",
@@ -1800,6 +1803,16 @@ var Mesh = /*#__PURE__*/function () {
       }
       this.onSharedEvent(event);
     }
+
+    /**
+     * Get all shared variable keys joined with comma
+     * @returns {string} Comma separated keys
+     */
+  }, {
+    key: "sharedVarKeys",
+    value: function sharedVarKeys() {
+      return Array.from(this.sharedVars.keys()).join(',');
+    }
   }]);
 }();
 
@@ -2239,6 +2252,16 @@ var MeshBlocks = /*#__PURE__*/function () {
     }
 
     /**
+     * Return all shared variable keys as comma separated string.
+     * @returns {string} - comma separated keys.
+     */
+  }, {
+    key: "sharedVarKeys",
+    value: function sharedVarKeys() {
+      return this.mesh.sharedVarKeys();
+    }
+
+    /**
      * @returns {object} metadata for this extension and its blocks.
      */
   }, {
@@ -2434,6 +2457,14 @@ var MeshBlocks = /*#__PURE__*/function () {
               })
             }
           }
+        }, {
+          opcode: 'sharedVarKeys',
+          blockType: BlockType$1.REPORTER,
+          disableMonitor: true,
+          text: formatMessage({
+            id: 'xcxMesh.sharedVarKeys',
+            default: 'all shared variable keys'
+          })
         }, '---', {
           opcode: 'dispatchSharedEvent',
           blockType: BlockType$1.COMMAND,

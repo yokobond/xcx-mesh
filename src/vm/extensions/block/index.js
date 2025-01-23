@@ -387,6 +387,14 @@ class MeshBlocks {
     }
 
     /**
+     * Return all shared variable keys as comma separated string.
+     * @returns {string} - comma separated keys.
+     */
+    sharedVarKeys () {
+        return this.mesh.sharedVarKeys();
+    }
+
+    /**
      * @returns {object} metadata for this extension and its blocks.
      */
     getInfo () {
@@ -596,6 +604,15 @@ class MeshBlocks {
                             })
                         }
                     }
+                },
+                {
+                    opcode: 'sharedVarKeys',
+                    blockType: BlockType.REPORTER,
+                    disableMonitor: true,
+                    text: formatMessage({
+                        id: 'xcxMesh.sharedVarKeys',
+                        default: 'all shared variable keys'
+                    })
                 },
                 '---',
                 {

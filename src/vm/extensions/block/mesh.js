@@ -454,6 +454,14 @@ class Mesh {
         }
         this.onSharedEvent(event);
     }
+
+    /**
+     * Get all shared variable keys joined with comma
+     * @returns {string} Comma separated keys
+     */
+    sharedVarKeys () {
+        return Array.from(this.sharedVars.keys()).join(',');
+    }
 }
 
 export default Mesh;
