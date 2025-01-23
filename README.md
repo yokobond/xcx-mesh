@@ -20,7 +20,8 @@ https://yokobond.github.io/xcx-mesh/dist/xcxMesh.mjs
 
 Play [Example Project](https://xcratch.github.io/editor/#https://yokobond.github.io/xcx-mesh/projects/example.sb3) to look at what you can do with "Mesh" extension.
 
-This project demonstrates how to use the "Mesh" extension to establish a peer-to-peer connection between two or more Scratch projects. Start the project in multiple tabs or browsers to see how the projects can communicate with each other. Press the green flag to start the project and click the "Mesh" sprite to open peer with a unique ID. After each peer of the projects are opened, you can connect to other peers by clicking the "Mesh" sprite and typing the ID in the input field. Once the connection is established, you can share key=values and events with the connected peers. Then you can move your cat sprite with arrow keys and see movement of the cat sprite in other connected projects.
+This project demonstrates how to use the "Mesh" extension to establish a peer-to-peer connection between two or more Scratch projects. Start the project in multiple tabs or browsers to see how the projects can communicate with each other. Press the green flag to start the project and click the "Mesh" sprite to open peer with a unique ID. After each peer of the projects are opened, you can connect to other peers by clicking the "Mesh" sprite and typing the ID in the input field. Once the connection is established, you can share key=values and events with the connected peers. Then you can move your cat sprite with arrow keys and see movement of the cat sprite in other connected projects. You can also make your sprite speak by clicking it, and press the space key to make it say "pruuu". These actions will be synchronized across all connected peers.
+
 <iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-mesh/projects/example.sb3" width="540px" height="460px"></iframe>
 
 ## 🏠 Home Page
