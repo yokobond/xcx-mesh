@@ -37,6 +37,8 @@ class Mesh {
     constructor () {
         /** @type {Peer|null} PeerJS instance */
         this.peer = null;
+        /** @type {string|null} PeerJS server host */
+        this.peerServer = null;
         /** @type {string} ICE servers configuration */
         this.iceServers = null;
         /** @type {string|null} Local peer ID */
@@ -96,6 +98,14 @@ class Mesh {
     }
 
     /**
+     * Set PeerJS server host
+     * @param {string} server - PeerJS server host
+     */
+    setPeerServer (server) {
+        this.peerServer = server;
+    }
+
+    /**
      * Set ICE servers configuration
      * @param {string} servers - ICE servers configuration in JSON format
      */
@@ -125,11 +135,22 @@ class Mesh {
             this.closePeer();
         }
         return new Promise((resolve, reject) => {
-            this.peer = new Peer(encodeToPeerID(localID), {
+            const options = {
                 config: {
                     iceServers: this.iceServers ? this.iceServers : []
                 }
-            });
+            };
+            if (this.peerServer) {
+                const url = new URL(this.peerServer);
+                options.host = url.hostname;
+                options.port = url.port || (url.protocol === 'https:' ? 443 : 80);
+                options.path = url.pathname;
+                if (options.path.endsWith('/')) {
+                    options.path = options.path.slice(0, -1);
+                }
+                options.secure = url.protocol === 'https:';
+            }
+            this.peer = new Peer(encodeToPeerID(localID), options);
             this.peer.on('open', peerID => {
                 this.id = decodeFromPeerID(peerID);
                 this.peer.on('connection', requested => {

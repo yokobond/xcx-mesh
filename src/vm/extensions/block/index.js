@@ -186,6 +186,22 @@ class MeshBlocks {
     }
 
     /**
+     * Set PeerJS server.
+     * @param {object} args - arguments for the block.
+     * @param {string} args.SERVER - the server URL.
+     * @returns {string} - result message
+     */
+    setPeerServer (args) {
+        const server = String(args.SERVER).trim();
+        try {
+            this.mesh.setPeerServer(server);
+            return `PeerJS server set to "${server}"`;
+        } catch (e) {
+            return `Failed to set PeerJS server: ${e}`;
+        }
+    }
+
+    /**
      * Open data connection with a remote peer.
      * @param {object} args - the block's arguments.
      * @param {string} args.ID - the remote ID.
@@ -363,6 +379,20 @@ class MeshBlocks {
                         id: 'xcxMesh.closePeer',
                         default: 'close peer'
                     })
+                },
+                {
+                    opcode: 'setPeerServer',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'xcxMesh.setPeerServer',
+                        default: 'set peer server to [SERVER]'
+                    }),
+                    arguments: {
+                        SERVER: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'https://0.peerjs.com'
+                        }
+                    }
                 },
                 {
                     opcode: 'setICEServers',
