@@ -29,10 +29,11 @@ const entry = {
     insetIconURL: insetIconURL,
     get description () {
         return formatMessage({
-            defaultMessage: 'Mesh extension for Xcratch',
+            defaultMessage: 'Perform peer-to-peer communication. Use WebRTC to send and receive text data.',
             id: 'xcxMesh.entry.description'
         });
     },
+    tags: ['network', 'communication', 'p2p', 'mesh'],
     featured: true,
     disabled: false,
     bluetoothRequired: false,
